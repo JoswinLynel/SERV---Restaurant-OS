@@ -26,7 +26,7 @@ export default function LoginPage() {
   return (
     <main className="min-h-screen bg-orange-50 flex items-center justify-center p-4">
       <div className="bg-white rounded-2xl shadow-lg p-8 w-full max-w-md">
-        <h1 className="text-2xl font-bold text-orange-600 mb-6">Login to OrderKing</h1>
+        <h1 className="text-2xl font-bold text-orange-600 mb-6">Login to SERVÉ</h1>
         <form onSubmit={handleLogin} className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>

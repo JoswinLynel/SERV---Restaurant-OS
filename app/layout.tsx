@@ -9,7 +9,7 @@ const geistSans = Geist({
 });
 
 export const metadata: Metadata = {
-  title: "OrderKing",
+  title: "SERVÉ",
   description: "QR code ordering for restaurants",
 };
 

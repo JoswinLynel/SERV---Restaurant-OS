@@ -1,4 +1,4 @@
-# 🍜 OrderKing
+# 🍽️ SERVÉ
 
 **A production full-stack QR-code ordering & point-of-sale SaaS for restaurants.**
 Diners scan a table QR code, order from their phone, and the kitchen sees the
@@ -12,13 +12,9 @@ order appear live — no app install, no waiter, no hardware beyond a screen.
   <img alt="License" src="https://img.shields.io/badge/License-MIT-green">
 </p>
 
-🔗 **Live demo:** [www.orderking.uk](https://www.orderking.uk)
-📱 **Order as a customer (no login):** [Demo Kitchen — Table 3](https://www.orderking.uk/menu/11111111-1111-1111-1111-111111111111/3) — add items and place an order.
-💻 **See the kitchen side:** log in at [/auth/login](https://www.orderking.uk/auth/login) with **`demo@orderking.uk`** / **`123456`** and watch the order you just placed appear live, then check it out.
-
-> Built and shipped solo by an undergraduate CS student, then taken to real
-> Sydney restaurants for in-person sales. See [What I learned](#-what-i-learned) — the
-> most valuable part of this project wasn't the code.
+🔗 **Live demo:** [www.serve-os.com](https://www.serve-os.com)
+📱 **Order as a customer (no login):** [Demo Kitchen — Table 3](https://www.serve-os.com/menu/11111111-1111-1111-1111-111111111111/3) — add items and place an order.
+💻 **See the kitchen side:** log in at [/auth/login](https://www.serve-os.com/auth/login) with **`demo@serve-os.com`** / **`123456`** and watch the order you just placed appear live, then check it out.
 
 ---
 
@@ -120,8 +116,8 @@ order_items  id, order_id, menu_item_id, name, price, quantity
 
 ```bash
 # 1. Clone
-git clone https://github.com/Ryan87834/orderking.git
-cd orderking
+git clone https://github.com/JoswinLynel/SERV---Restaurant-OS.git
+cd SERV---Restaurant-OS
 
 # 2. Install
 npm install
@@ -173,15 +169,11 @@ Real problems solved while shipping this — the parts worth talking through:
 
 ## 💡 What I learned
 
-I built OrderKing end-to-end, deployed it, then walked into Sydney restaurants to sell
-it in person. **It got zero sign-ups** — and that taught me more than the code did.
-
-The product was a *me-too*: restaurants that wanted QR ordering already had mature POS
-systems, and the ones that didn't treated table service as a selling point, not a cost.
-I'd built a polished solution to a problem my target customers didn't feel.
+I built SERVÉ end-to-end, deployed it, then walked into Sydney restaurants to sell
+it in person.
 
 The lesson I carry forward: **validate demand before writing code.** Talk to users,
-find a real and painful problem, and only then build. OrderKing is a strong piece of
+find a real and painful problem, and only then build. SERVÉ is a strong piece of
 engineering — and a formative lesson in product judgment.
 
 ---

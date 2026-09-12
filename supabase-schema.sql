@@ -1,4 +1,4 @@
--- OrderKing — complete database schema
+-- SERVÉ — complete database schema
 -- Run this in the Supabase SQL Editor on a fresh project.
 -- Then create a public Storage bucket named "menu-images" (see bottom).
 

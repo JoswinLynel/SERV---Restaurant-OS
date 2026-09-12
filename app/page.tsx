@@ -4,7 +4,7 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-gradient-to-br from-orange-50 to-orange-100 flex flex-col items-center justify-center p-8">
       <div className="text-center max-w-xl">
-        <h1 className="text-5xl font-bold text-orange-600 mb-4">OrderKing</h1>
+        <h1 className="text-5xl font-bold text-orange-600 mb-4">SERVÉ</h1>
         <p className="text-xl text-gray-600 mb-2">
           Free QR code ordering for your restaurant
         </p>

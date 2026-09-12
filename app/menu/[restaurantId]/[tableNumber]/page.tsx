@@ -140,10 +140,9 @@ export default function MenuPage({ params }: { params: Promise<{ restaurantId: s
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-900 text-white p-8 text-center">
       <div className="text-sm text-gray-400 mb-6">Advertisement</div>
       <div className="bg-white rounded-2xl p-8 text-gray-800 max-w-sm w-full mb-6">
-        <div className="text-4xl mb-3">👑</div>
-        <h3 className="text-xl font-bold text-orange-600 mb-2">OrderKing</h3>
+        <div className="text-4xl mb-3">🍽️</div>
+        <h3 className="text-xl font-bold text-orange-600 mb-2">SERVÉ</h3>
         <p className="text-gray-500">Free QR code ordering system for your restaurant</p>
-        <p className="text-sm text-orange-500 mt-1">orderking.uk</p>
       </div>
       <div className="text-gray-400 text-sm">Placing order in {adCountdown}s...</div>
     </div>

@@ -54,7 +54,7 @@ async function renderQRCard(
   // Footer label
   ctx.fillStyle = '#9ca3af'
   ctx.font = '400 10px -apple-system, "Helvetica Neue", Arial, sans-serif'
-  ctx.fillText('Powered by OrderKing · orderking.uk', CARD_W / 2, CARD_H - 18)
+  ctx.fillText('Powered by SERVÉ', CARD_W / 2, CARD_H - 18)
 }
 
 export default function TablesPage() {

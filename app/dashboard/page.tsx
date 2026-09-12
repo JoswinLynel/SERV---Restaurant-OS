@@ -84,7 +84,7 @@ export default function DashboardPage() {
   return (
     <main className="min-h-screen bg-gray-50">
       <nav className="bg-white border-b px-6 py-4 flex items-center justify-between">
-        <h1 className="text-xl font-bold text-orange-600">OrderKing</h1>
+        <h1 className="text-xl font-bold text-orange-600">SERVÉ</h1>
         <span className="text-gray-600 font-medium">{restaurant?.name}</span>
         <button
           onClick={async () => { await supabase.auth.signOut(); router.push('/') }}

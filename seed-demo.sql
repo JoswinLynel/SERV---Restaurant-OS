@@ -1,6 +1,6 @@
--- OrderKing — demo seed data (optional, for a public live demo)
+-- SERVÉ — demo seed data (optional, for a public live demo)
 --
--- PREREQUISITE: sign up once in the app with email  demo@orderking.uk
+-- PREREQUISITE: sign up once in the app with email  demo@serve-os.com
 -- (any password). That creates the auth user this script claims as owner.
 -- Then run this in the Supabase SQL Editor.
 --
@@ -16,16 +16,16 @@ declare
   c_mains    uuid := gen_random_uuid();
   c_drinks   uuid := gen_random_uuid();
 begin
-  select id into owner from auth.users where email = 'demo@orderking.uk' limit 1;
+  select id into owner from auth.users where email = 'demo@serve-os.com' limit 1;
   if owner is null then
-    raise exception 'Sign up in the app with demo@orderking.uk first, then re-run this script.';
+    raise exception 'Sign up in the app with demo@serve-os.com first, then re-run this script.';
   end if;
 
   -- clean any previous demo data
   delete from restaurants where id = rid;
 
   insert into restaurants (id, owner_id, name, address, card_surcharge_pct)
-  values (rid, owner, 'OrderKing Demo Kitchen', '123 George St, Sydney NSW', 1.5);
+  values (rid, owner, 'SERVÉ Demo Kitchen', '123 George St, Sydney NSW', 1.5);
 
   insert into categories (id, restaurant_id, name, sort_order) values
     (c_starters, rid, 'Starters', 1),
