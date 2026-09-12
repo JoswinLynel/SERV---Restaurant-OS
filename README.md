@@ -1,183 +1,151 @@
-# 🍽️ SERVÉ
+# 🍽️ SERVÉ — Restaurant OS
 
-**A production full-stack QR-code ordering & point-of-sale SaaS for restaurants.**
-Diners scan a table QR code, order from their phone, and the kitchen sees the
-order appear live — no app install, no waiter, no hardware beyond a screen.
+<p align="center">
+  <img src="docs/landing.png" alt="SERVÉ Banner" width="100%" style="border-radius: 12px;" />
+</p>
 
-<p>
-  <img alt="Next.js" src="https://img.shields.io/badge/Next.js-16-black?logo=next.js">
-  <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-5-3178c6?logo=typescript&logoColor=white">
+<p align="center">
+  <b>A modern, full-stack QR ordering & Point-of-Sale (POS) SaaS platform for restaurants.</b><br />
+  Diners scan table QR codes to order directly from their browser — no app installation required. Orders stream live to the kitchen dashboard in real time.
+</p>
+
+<p align="center">
+  <img alt="Next.js" src="https://img.shields.io/badge/Next.js-16%20App%20Router-black?logo=next.js">
+  <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-5.0-3178c6?logo=typescript&logoColor=white">
   <img alt="Supabase" src="https://img.shields.io/badge/Supabase-Postgres%20%2B%20Realtime-3ecf8e?logo=supabase&logoColor=white">
-  <img alt="Tailwind CSS" src="https://img.shields.io/badge/Tailwind-4-38bdf8?logo=tailwindcss&logoColor=white">
+  <img alt="Tailwind CSS" src="https://img.shields.io/badge/Tailwind-v4-38bdf8?logo=tailwindcss&logoColor=white">
   <img alt="License" src="https://img.shields.io/badge/License-MIT-green">
 </p>
 
-🔗 **Live demo:** [www.serve-os.com](https://www.serve-os.com)
-📱 **Order as a customer (no login):** [Demo Kitchen — Table 3](https://www.serve-os.com/menu/11111111-1111-1111-1111-111111111111/3) — add items and place an order.
-💻 **See the kitchen side:** log in at [/auth/login](https://www.serve-os.com/auth/login) with **`demo@serve-os.com`** / **`123456`** and watch the order you just placed appear live, then check it out.
-
 ---
 
-## 📸 Screenshots
+## 📸 Screenshots & Showcase
 
-| Customer ordering (mobile) | Live kitchen dashboard | Checkout |
+| 📱 Mobile Diner Menu | 💻 Live Kitchen Dashboard | 💳 POS Counter Checkout |
 | :---: | :---: | :---: |
 | ![Customer menu](docs/customer-menu.png) | ![Live orders](docs/live-orders.png) | ![Checkout](docs/checkout.png) |
 
 ---
 
-## ✨ Features
+## ✨ Key Features
 
-- **📱 QR ordering, zero install** — each table has a QR code; diners order straight from the browser.
-- **⚡ Real-time kitchen dashboard** — orders push live to staff via Supabase Realtime (Postgres logical replication), grouped by table, with a sound alert.
-- **🧾 Built-in POS checkout** — cash / card / bank-transfer, automatic card surcharge, public-holiday surcharge toggle, change calculation, and table-level bill merging.
-- **🥡 Dine-in & takeaway** — auto-numbered takeaway tickets (T01, T02…) that live alongside table orders in one queue.
-- **🍽️ Self-service menu management** — categories, images, prices, and availability, all editable by the owner.
-- **🔢 One-click QR table cards** — generate printable table cards (restaurant name + table number + QR) on the fly.
-- **↩️ Undo checkout & daily takings** — revert a mistaken payment; see today's revenue split by payment method.
-- **🌏 Modern English UI** — Clean, intuitive interface for staff and customers.
+### 📱 Customer Experience (Dine-In)
+- **Zero-Friction QR Ordering**: Diners scan a table QR code and view the menu immediately inside any mobile browser. No app download required.
+- **Categorized Menu & Special Requests**: Browse dishes by category with crisp photos, pricing, and add custom item notes (e.g. *"No onions, extra sauce"*).
+- **Cart & Order Tracking**: Instant item total calculations and smooth order submission straight to the kitchen.
+
+### 💻 Kitchen & Staff Dashboard
+- **Real-Time Order Push**: New orders arrive instantaneously without manual page refreshes, powered by Supabase Realtime (Postgres logical replication).
+- **Audible Alerts**: Configurable chime/beep notification triggers when a new order arrives.
+- **Dine-In & Takeaway Management**: Separate or view unified queues. Auto-generates takeaway tickets (`T01`, `T02`...) for walk-in takeaway orders.
+- **Table Bill Merging**: Group multiple orders placed on the same physical table into a consolidated bill for checkout.
+
+### 🧾 POS & Counter Operations
+- **Multi-Method Payment Support**: Process Cash, Card, or Direct Transfer transactions.
+- **Automated Surcharges**: Configurable card surcharge percentages and one-click Public Holiday (PH) surcharge toggles.
+- **Smart Change Calculator**: Instant change calculations with quick-cash bill buttons ($20, $50, $100).
+- **Payment Reversals (Undo)**: Accidental payment checkout can be reverted back to *Confirmed* status in one click.
+- **Daily Revenue Analytics**: Real-time sales breakdown of today's total revenue split by payment method and collected surcharges.
+
+### 🪑 Operations & Admin Tools
+- **Menu Builder**: Full CRUD for menu items and categories. Set price, description, category assignment, and upload images to cloud storage.
+- **Stock Availability Toggles**: Toggle items as *Available* or *Unavailable* in real time to prevent diners from ordering sold-out dishes.
+- **Printable QR Code Card Generator**: Built-in client-side HTML5 Canvas generator produces high-resolution table card graphics (`Table 1`, `Table 2`...) ready for printing and placement on physical tables.
 
 ---
 
-## 🏗️ Architecture
+## 🏗️ System Architecture
 
 ```mermaid
 flowchart LR
-    subgraph Diner["📱 Diner's phone"]
-        M["Menu page<br/>/menu/:restaurant/:table"]
+    subgraph Client["📱 Customer Device"]
+        M["Public Menu Route<br/>/menu/:restaurantId/:tableNumber"]
     end
-    subgraph Staff["💻 Restaurant staff"]
-        D["Dashboard<br/>orders · menu · tables"]
+    subgraph Staff["💻 Staff Dashboard"]
+        D["Kitchen KDS & POS<br/>/dashboard/orders"]
     end
-    subgraph Vercel["▲ Vercel — Next.js 16 (App Router)"]
-        RSC["Server & Client Components"]
+    subgraph NextServer["▲ Next.js 16 (App Router)"]
+        SSR["RSC & Route Handlers"]
     end
-    subgraph Supabase["🟢 Supabase"]
-        PG[("Postgres<br/>+ Row-Level Security")]
-        RT["Realtime<br/>(logical replication)"]
-        ST["Storage<br/>(menu images)"]
+    subgraph Cloud["🟢 Supabase Cloud"]
+        DB[("Postgres Database<br/>+ Scoped RLS Policies")]
+        RT["Realtime Engine<br/>(Logical Replication)"]
+        ST["Storage Bucket<br/>(menu-images)"]
         AU["Auth"]
     end
 
-    M -->|"anon insert (RLS)"| PG
-    D -->|"owner CRUD (RLS)"| PG
-    D <-->|"auth"| AU
-    PG -->|"row change"| RT
-    RT -->|"live order push"| D
-    M -->|"read images"| ST
-    M & D --- RSC
-```
-
-**Flow:** a diner scans a table QR → opens the public menu (read access scoped by
-Row-Level Security) → places an order (anonymous insert) → Postgres emits the change
-over logical replication → Supabase Realtime pushes it to the authenticated kitchen
-dashboard within ~1s. No polling, no websockets to manage by hand.
-
-### Order lifecycle
-
-```
-Dine-in:   scan QR → pending → ✓ confirm → confirmed → 💰 checkout → paid
-Takeaway:  staff creates (T01) → pending → ✓ confirm → confirmed → 💰 checkout → paid
+    M -->|"Anonymous INSERT (RLS)"| DB
+    D -->|"Owner CRUD (RLS)"| DB
+    D <-->|"Session Auth"| AU
+    DB -->|"Postgres Row Change"| RT
+    RT -->|"Live Order Event Push (~1s)"| D
+    M -->|"Fetch Public Media"| ST
+    M & D --- SSR
 ```
 
 ---
 
-## 🧰 Tech stack
-
-| Layer | Choice | Why |
-| --- | --- | --- |
-| Framework | **Next.js 16** (App Router, Turbopack) | One codebase for the public menu, the dashboard, and server logic |
-| Language | **TypeScript** | Shared domain types (`lib/types.ts`) across client and server |
-| Database | **Supabase Postgres** | Relational data (orders, items, tables) + Row-Level Security |
-| Realtime | **Supabase Realtime** | Live order push without hand-rolled websockets |
-| Storage / Auth | **Supabase Storage / Auth** | Menu images + restaurant owner accounts |
-| Styling | **Tailwind CSS 4** | Fast, consistent mobile-first UI |
-| Hosting | **Vercel** + **Cloudflare** DNS | Zero-config deploys, custom domain |
-
----
-
-## 🗂️ Data model (core tables)
+## 🗂️ Database Schema Overview
 
 ```
 restaurants ──┬──< categories ──< menu_items
               ├──< tables
               └──< orders ──< order_items
-
-restaurants  id, name, owner_id, address, card_surcharge_pct, ph_surcharge_pct, ph_active
-orders       id, restaurant_id, table_id?, table_number, order_type, status,
-             total, surcharge, grand_total, payment_method, cash_received,
-             change_given, paid_at, customer_name?, customer_phone?
-order_items  id, order_id, menu_item_id, name, price, quantity
 ```
+
+- `restaurants`: Stores restaurant details, owner link, card surcharge %, public holiday surcharge %, and active toggles.
+- `categories`: Menu categories sorted by custom display order.
+- `menu_items`: Dish names, descriptions, prices, image URLs, category links, and availability status.
+- `tables`: Physical table numbers associated with a restaurant.
+- `orders`: Tracks table numbers or takeaway identifiers (`T01`), status (`pending`, `confirmed`, `ready`, `paid`), totals, surcharges, payment methods, and timestamps.
+- `order_items`: Line items linked to orders capturing snapshots of item names, prices, and quantities at order time.
 
 ---
 
-## 🚀 Run it locally
+## 🚀 Getting Started
+
+### 1. Prerequisites
+- **Node.js**: v18.x or higher
+- **npm**: v9.x or higher
+- **Supabase Account**: A free Supabase project at [supabase.com](https://supabase.com)
+
+### 2. Installation & Setup
 
 ```bash
-# 1. Clone
+# Clone the repository
 git clone https://github.com/JoswinLynel/SERV---Restaurant-OS.git
 cd SERV---Restaurant-OS
 
-# 2. Install
+# Install dependencies
 npm install
-
-# 3. Configure environment
-cp .env.example .env.local
-#   → fill in your Supabase URL + anon key
-
-# 4. Set up the database
-#   Run supabase-schema.sql in your Supabase project's SQL editor.
-
-# 5. Develop
-npm run dev        # http://localhost:3000
 ```
 
-**Environment variables** (see [`.env.example`](.env.example)):
+### 3. Environment Configuration
 
-| Variable | Description |
-| --- | --- |
-| `NEXT_PUBLIC_SUPABASE_URL` | Your Supabase project URL |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase anonymous (public) key |
+Create a `.env.local` file in the project root:
 
----
+```env
+NEXT_PUBLIC_SUPABASE_URL=https://your-project-ref.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-public-key
+```
 
-## 🔬 Engineering highlights
+### 4. Database Initialization
 
-Real problems solved while shipping this — the parts worth talking through:
+1. Open your Supabase Project SQL Editor.
+2. Run the complete schema script: [`supabase-schema.sql`](supabase-schema.sql)
+3. *(Optional)* Run the demo seed dataset script: [`seed-demo.sql`](seed-demo.sql)
+4. Ensure a public Storage bucket named `menu-images` is created in Supabase.
 
-- **Secure anonymous ordering with RLS.** Diners are unauthenticated, yet must read
-  one restaurant's menu and insert orders without seeing anyone else's data. Solved
-  with scoped Row-Level Security policies (public `SELECT` on menu data, controlled
-  `INSERT` on orders) and client-generated UUIDs so an insert never needs a follow-up
-  `SELECT` it isn't allowed to make.
-- **Reliable real-time delivery.** Orders are pushed via Postgres logical replication.
-  Subtle gotcha learned the hard way: a Supabase channel must bind its callback
-  *before* `subscribe()`, and target tables must be added to the realtime publication —
-  otherwise events silently never arrive.
-- **Correct money math at the counter.** Configurable card and public-holiday
-  surcharges, change calculation, and merging several orders on one table into a single
-  bill — all persisted so a refresh never loses state, with an undo path for mistakes.
-- **One queue, two order types.** Dine-in and takeaway share the `orders` table via an
-  `order_type` discriminator and a nullable `table_id`, with takeaway tickets
-  auto-numbered independently of physical tables.
-- **Mobile-first, install-free UX.** The whole diner experience is a single responsive
-  web page — the friction of "download our app" is exactly what kills QR ordering, so
-  there is no app.
+### 5. Run Locally
 
----
+```bash
+npm run dev
+```
 
-## 💡 What I learned
-
-I built SERVÉ end-to-end, deployed it, then walked into Sydney restaurants to sell
-it in person.
-
-The lesson I carry forward: **validate demand before writing code.** Talk to users,
-find a real and painful problem, and only then build. SERVÉ is a strong piece of
-engineering — and a formative lesson in product judgment.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ---
 
 ## 📄 License
 
-[MIT](LICENSE) © Junyu Chen
+Distributed under the MIT License. See [`LICENSE`](LICENSE) for more information.
