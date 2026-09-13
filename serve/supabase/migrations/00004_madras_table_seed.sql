@@ -56,7 +56,7 @@ INSERT INTO menu_items (category_id, name, description, price, is_available, dis
 ('50000000-0000-0000-0000-000000000003', 'Chettinad Chicken', 'Tender chicken cooked in a rich Chettinad masala with roasted coconut, fennel, pepper and aromatic spices.', 13.95, true, 1, '/images/chettinad_chicken_curry.jpg'),
 ('50000000-0000-0000-0000-000000000003', 'Butter Chicken', 'Tandoori-style chicken simmered in a silky tomato and butter sauce with gentle spices.', 14.50, true, 2, '/images/butter_chicken.png'),
 ('50000000-0000-0000-0000-000000000003', 'Madras Chicken Curry', 'Chicken cooked in a bold South Indian curry with tomato, onion, chilli and fresh curry leaves.', 13.50, true, 3, '/images/madras_chicken_curry.jpg'),
-('50000000-0000-0000-0000-000000000003', 'Karaikudi Chicken', 'A fiery regional chicken curry made with roasted spices, coconut and Karaikudi-style masala.', 14.25, true, 4, NULL),
+('50000000-0000-0000-0000-000000000003', 'Karaikudi Chicken', 'A fiery regional chicken curry made with roasted spices, coconut and Karaikudi-style masala.', 14.25, true, 4, '/images/karaikudi_chicken.jpg'),
 ('50000000-0000-0000-0000-000000000003', 'Chicken Kothu Parotta', 'Flaky parotta chopped and tossed with chicken, egg, onion, chilli and aromatic spices.', 12.95, true, 5, NULL);
 
 -- MUTTON & LAMB
