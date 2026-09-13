@@ -32,7 +32,6 @@ CREATE TABLE tables (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     restaurant_id UUID NOT NULL REFERENCES restaurants(id) ON DELETE CASCADE,
     table_number TEXT NOT NULL,
-    code TEXT UNIQUE,
     status TEXT DEFAULT 'available' CHECK (status IN ('available', 'occupied', 'ordering', 'preparing', 'ready', 'payment_required')),
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     UNIQUE (restaurant_id, table_number)
