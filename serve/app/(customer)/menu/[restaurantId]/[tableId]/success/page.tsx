@@ -16,18 +16,19 @@ export default function SuccessPage() {
   const router = useRouter();
   const pathname = usePathname();
   const params = useParams();
-  const { clearBasket } = useBasket();
+  const { clearBasket, isLoaded } = useBasket();
   const hasCleared = useRef(false);
 
   const menuUrl = pathname.replace("/success", "");
 
   // Clear basket once on mount — use ref to prevent infinite re-render
+  // and wait for isLoaded to prevent the load effect from overwriting the clear
   useEffect(() => {
-    if (!hasCleared.current) {
+    if (isLoaded && !hasCleared.current) {
       hasCleared.current = true;
       clearBasket();
     }
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [isLoaded]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (!orderId) return;

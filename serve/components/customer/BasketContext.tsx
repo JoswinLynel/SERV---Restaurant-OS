@@ -27,6 +27,7 @@ interface BasketContextType {
   clearBasket: () => void;
   total: number;
   itemCount: number;
+  isLoaded: boolean;
 }
 
 const BasketContext = createContext<BasketContextType | undefined>(undefined);
@@ -58,8 +59,36 @@ export function BasketProvider({ children, restaurantId, tableId }: { children: 
   }, [items, isLoaded, storageKey]);
 
   const addItem = (item: Omit<BasketItem, "id">) => {
-    const newItem: BasketItem = { ...item, id: Math.random().toString(36).substring(7) };
-    setItems((prev) => [...prev, newItem]);
+    setItems((prev) => {
+      // Find an existing item with the same menu_item_id, notes, and exact same modifiers
+      const existingItemIndex = prev.findIndex((pItem) => {
+        if (pItem.menu_item_id !== item.menu_item_id) return false;
+        if (pItem.notes !== item.notes) return false;
+        
+        // Check modifiers
+        if (pItem.modifiers.length !== item.modifiers.length) return false;
+        
+        // Sort modifier IDs to compare them regardless of order
+        const pModIds = [...pItem.modifiers].map(m => m.id).sort().join(',');
+        const iModIds = [...item.modifiers].map(m => m.id).sort().join(',');
+        
+        return pModIds === iModIds;
+      });
+
+      if (existingItemIndex >= 0) {
+        // Item exists, just increment quantity
+        const newItems = [...prev];
+        newItems[existingItemIndex] = {
+          ...newItems[existingItemIndex],
+          quantity: newItems[existingItemIndex].quantity + item.quantity
+        };
+        return newItems;
+      }
+
+      // If no match found, add as a new item
+      const newItem: BasketItem = { ...item, id: Math.random().toString(36).substring(7) };
+      return [...prev, newItem];
+    });
   };
 
   const removeItem = (id: string) => {
@@ -78,6 +107,9 @@ export function BasketProvider({ children, restaurantId, tableId }: { children: 
 
   const clearBasket = () => {
     setItems([]);
+    if (typeof window !== "undefined") {
+      localStorage.removeItem(storageKey);
+    }
   };
 
   const total = items.reduce((acc, item) => {
@@ -89,7 +121,7 @@ export function BasketProvider({ children, restaurantId, tableId }: { children: 
 
   return (
     <BasketContext.Provider
-      value={{ items, addItem, removeItem, updateQuantity, clearBasket, total, itemCount }}
+      value={{ items, addItem, removeItem, updateQuantity, clearBasket, total, itemCount, isLoaded }}
     >
       {children}
     </BasketContext.Provider>
