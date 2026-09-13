@@ -85,8 +85,8 @@ INSERT INTO menu_items (category_id, name, description, price, is_available, dis
 ('50000000-0000-0000-0000-000000000007', 'Plain Rice', 'Steamed basmati rice.', 3.50, true, 1, '/images/plain_rice.jpg'),
 ('50000000-0000-0000-0000-000000000007', 'Jeera Rice', 'Basmati rice tempered with cumin and fragrant whole spices.', 4.25, true, 2, '/images/jeera_rice.jpg'),
 ('50000000-0000-0000-0000-000000000007', 'Garlic Naan', 'Soft naan finished with garlic, butter and fresh coriander.', 4.25, true, 3, '/images/garlic_naan.jpg'),
-('50000000-0000-0000-0000-000000000007', 'Butter Naan', 'Soft tandoor-baked naan brushed with melted butter.', 3.95, true, 4, NULL),
-('50000000-0000-0000-0000-000000000007', 'Parotta', 'Flaky, layered South Indian flatbread served warm.', 3.95, true, 5, NULL);
+('50000000-0000-0000-0000-000000000007', 'Butter Naan', 'Soft tandoor-baked naan brushed with melted butter.', 3.95, true, 4, '/images/butter_naan.jpg'),
+('50000000-0000-0000-0000-000000000007', 'Parotta', 'Flaky, layered South Indian flatbread served warm.', 3.95, true, 5, '/images/parotta.jpg');
 
 -- SIDES
 INSERT INTO menu_items (category_id, name, description, price, is_available, display_order, image_url) VALUES
