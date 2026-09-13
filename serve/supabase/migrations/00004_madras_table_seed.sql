@@ -92,7 +92,7 @@ INSERT INTO menu_items (category_id, name, description, price, is_available, dis
 INSERT INTO menu_items (category_id, name, description, price, is_available, display_order, image_url) VALUES
 ('50000000-0000-0000-0000-000000000008', 'Sambar', 'Traditional South Indian lentil and vegetable stew with tamarind and aromatic spices.', 3.95, true, 1, '/images/sambar.jpg'),
 ('50000000-0000-0000-0000-000000000008', 'Coconut Chutney', 'Fresh coconut chutney with green chilli, ginger and roasted lentils.', 2.50, true, 2, '/images/coconut_chutney.jpg'),
-('50000000-0000-0000-0000-000000000008', 'Onion Raita', 'Cooling yoghurt mixed with fresh onion, coriander and mild spices.', 3.25, true, 3, NULL);
+('50000000-0000-0000-0000-000000000008', 'Onion Raita', 'Cooling yoghurt mixed with fresh onion, coriander and mild spices.', 3.25, true, 3, '/images/onion_raita.jpg');
 
 -- DESSERTS
 INSERT INTO menu_items (category_id, name, description, price, is_available, display_order, image_url) VALUES
