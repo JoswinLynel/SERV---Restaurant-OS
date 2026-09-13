@@ -61,7 +61,7 @@ INSERT INTO menu_items (category_id, name, description, price, is_available, dis
 
 -- MUTTON & LAMB
 INSERT INTO menu_items (category_id, name, description, price, is_available, display_order, image_url) VALUES
-('50000000-0000-0000-0000-000000000004', 'Mutton Chettinad', 'Slow-cooked tender mutton in a rich Chettinad gravy with roasted coconut, pepper and fragrant spices.', 15.95, true, 1, NULL),
+('50000000-0000-0000-0000-000000000004', 'Mutton Chettinad', 'Slow-cooked tender mutton in a rich Chettinad gravy with roasted coconut, pepper and fragrant spices.', 15.95, true, 1, '/images/mutton_chettinad.jpg'),
 ('50000000-0000-0000-0000-000000000004', 'Mutton Pepper Masala', 'Tender mutton cooked with cracked black pepper, onion, curry leaves and South Indian spices.', 15.50, true, 2, NULL),
 ('50000000-0000-0000-0000-000000000004', 'Mutton Kothu Parotta', 'Chopped flaky parotta tossed with tender mutton, egg, onion, chilli and aromatic masala.', 13.95, true, 3, NULL),
 ('50000000-0000-0000-0000-000000000004', 'Lamb Madras', 'Tender lamb simmered in a rich Madras curry with tomato, chilli, onion and traditional spices.', 15.50, true, 4, NULL);
