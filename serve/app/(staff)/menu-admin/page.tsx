@@ -187,6 +187,23 @@ export default function MenuAdminPage() {
     await supabase.from("menu_items").update({ is_available: newStatus }).eq("id", item.id);
   };
 
+  const handleDeleteItem = async (item: any) => {
+    if (confirm(`Are you sure you want to delete ${item.name}?`)) {
+      const { error } = await supabase.from("menu_items").delete().eq("id", item.id);
+      
+      if (error) {
+        console.error("Failed to delete item", error);
+        alert(`Could not permanently delete ${item.name}. It may be referenced by historical orders. It has been hidden instead.`);
+        // Fallback: Archive by setting available = false
+        setItems(items.map(i => i.id === item.id ? { ...i, is_available: false } : i));
+        await supabase.from("menu_items").update({ is_available: false }).eq("id", item.id);
+      } else {
+        // Success
+        setItems(items.filter(i => i.id !== item.id));
+      }
+    }
+  };
+
   const openItemModal = (item?: any, categoryId?: string) => {
     if (item) {
       setEditingItem(item);
@@ -307,6 +324,13 @@ export default function MenuAdminPage() {
                             className="text-xs text-[var(--color-brand-ivory)] hover:text-white px-3 py-1 bg-[var(--color-brand-bg-elevated)] rounded border border-white/10"
                           >
                             EDIT
+                          </button>
+                          <button 
+                            onClick={() => handleDeleteItem(item)}
+                            className="p-1 text-red-500/50 hover:text-red-500 rounded hover:bg-red-500/10 transition-colors"
+                            title="Delete Item"
+                          >
+                            <Trash2 className="w-4 h-4" />
                           </button>
                         </div>
                       </div>

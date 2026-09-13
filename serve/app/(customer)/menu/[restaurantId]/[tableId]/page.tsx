@@ -4,6 +4,10 @@ import { MenuItemCard } from "@/components/customer/MenuItemCard";
 import { FloatingBasket } from "@/components/customer/FloatingBasket";
 import { CategoryNav } from "@/components/customer/CategoryNav";
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+export const fetchCache = 'force-no-store';
+
 export default async function MenuPage({
   params,
 }: {

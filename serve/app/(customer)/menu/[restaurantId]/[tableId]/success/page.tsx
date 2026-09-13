@@ -170,12 +170,12 @@ export default function SuccessPage() {
             </div>
           )}
 
-          <Link
+          <a
             href={menuUrl}
-            className="w-full block bg-[var(--color-brand-gold)] text-[var(--color-brand-bg-dark)] py-4 rounded font-sans font-medium text-sm tracking-[0.1em] uppercase shadow-[0_0_15px_rgba(201,164,92,0.1)] hover:bg-[var(--color-brand-gold-light)] transition-colors"
+            className="w-full block bg-[var(--color-brand-gold)] text-[var(--color-brand-bg-dark)] py-4 rounded font-sans font-medium text-sm tracking-[0.1em] uppercase shadow-[0_0_15px_rgba(201,164,92,0.1)] hover:bg-[var(--color-brand-gold-light)] transition-colors text-center"
           >
             Back to Menu
-          </Link>
+          </a>
         </div>
 
         <div className="pt-4">
