@@ -82,7 +82,7 @@ INSERT INTO menu_items (category_id, name, description, price, is_available, dis
 
 -- RICE & BREADS
 INSERT INTO menu_items (category_id, name, description, price, is_available, display_order, image_url) VALUES
-('50000000-0000-0000-0000-000000000007', 'Plain Rice', 'Steamed basmati rice.', 3.50, true, 1, NULL),
+('50000000-0000-0000-0000-000000000007', 'Plain Rice', 'Steamed basmati rice.', 3.50, true, 1, '/images/plain_rice.jpg'),
 ('50000000-0000-0000-0000-000000000007', 'Jeera Rice', 'Basmati rice tempered with cumin and fragrant whole spices.', 4.25, true, 2, NULL),
 ('50000000-0000-0000-0000-000000000007', 'Garlic Naan', 'Soft naan finished with garlic, butter and fresh coriander.', 4.25, true, 3, NULL),
 ('50000000-0000-0000-0000-000000000007', 'Butter Naan', 'Soft tandoor-baked naan brushed with melted butter.', 3.95, true, 4, NULL),
