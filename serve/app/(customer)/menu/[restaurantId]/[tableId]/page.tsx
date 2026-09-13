@@ -58,26 +58,38 @@ export default async function MenuPage({
   });
 
   return (
-    <div className="min-h-screen bg-background pb-24">
+    <div className="min-h-screen bg-[var(--color-brand-bg-dark)] text-[var(--color-brand-ivory)] pb-24 font-sans">
       {/* Header */}
-      <header className="sticky top-0 z-10 bg-background/80 backdrop-blur-md border-b border-[var(--color-brand-charcoal)]/10 px-6 py-4 flex justify-between items-center">
-        <div>
-          <h1 className="text-xl font-serif tracking-tight text-foreground">
-            {restaurant.name}
-          </h1>
-          <p className="text-xs text-foreground/60 uppercase tracking-widest mt-0.5">
-            Table {table.table_number}
-          </p>
+      <header className="sticky top-0 z-10 bg-[var(--color-brand-bg-dark)]/90 backdrop-blur-md px-6 py-6 flex flex-col items-center border-b border-white/5">
+        <div className="w-full flex justify-between items-start mb-2">
+          <div className="flex-1" />
+          <div className="flex-1 flex justify-center">
+            {/* Minimal Logo Mark */}
+            <svg width="24" height="24" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" className="opacity-80">
+              <path d="M20 0L23.5 16.5L40 20L23.5 23.5L20 40L16.5 23.5L0 20L16.5 16.5L20 0Z" fill="var(--color-brand-gold)"/>
+            </svg>
+          </div>
+          <div className="flex-1 flex justify-end">
+            <span className="text-[10px] uppercase tracking-widest text-[var(--color-brand-grey)] flex items-center gap-1 cursor-pointer">
+              EN <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+            </span>
+          </div>
         </div>
+        <h1 className="text-xl font-serif tracking-widest uppercase text-[var(--color-brand-ivory)] mt-2">
+          {restaurant.name}
+        </h1>
+        <p className="text-[10px] text-[var(--color-brand-grey)] uppercase tracking-[0.2em] mt-1">
+          Table {table.table_number}
+        </p>
       </header>
 
-      {/* Categories Nav (Optional horizontal scroll) */}
-      <nav className="px-6 py-4 overflow-x-auto whitespace-nowrap hide-scrollbar flex gap-6 border-b border-[var(--color-brand-charcoal)]/5">
-        {categories.map((category: any) => (
+      {/* Categories Nav */}
+      <nav className="px-6 py-4 overflow-x-auto whitespace-nowrap hide-scrollbar flex gap-8 border-b border-white/5 sticky top-[108px] z-10 bg-[var(--color-brand-bg-dark)]/90 backdrop-blur-md">
+        {categories.map((category: any, idx: number) => (
           <a
             key={category.id}
             href={`#category-${category.id}`}
-            className="text-sm uppercase tracking-widest font-medium text-foreground hover:text-[var(--color-brand-gold)] transition-colors"
+            className={`text-[11px] uppercase tracking-[0.15em] font-medium transition-colors ${idx === 0 ? 'text-[var(--color-brand-gold)] border-b border-[var(--color-brand-gold)] pb-1' : 'text-[var(--color-brand-grey)] hover:text-[var(--color-brand-ivory)]'}`}
           >
             {category.name}
           </a>
@@ -85,13 +97,13 @@ export default async function MenuPage({
       </nav>
 
       {/* Menu Content */}
-      <main className="px-6 py-8 space-y-12">
+      <main className="px-4 py-8 space-y-16 max-w-3xl mx-auto">
         {categories.map((category: any) => (
           <section key={category.id} id={`category-${category.id}`}>
-            <h2 className="text-2xl font-serif mb-6 text-foreground">
+            <h2 className="text-2xl font-serif mb-6 px-2 text-[var(--color-brand-ivory)] border-b border-white/5 pb-4">
               {category.name}
             </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="flex flex-col space-y-1">
               {category.menu_items.map((item: any) => (
                 <MenuItemCard key={item.id} item={item} restaurantId={restaurantId} />
               ))}

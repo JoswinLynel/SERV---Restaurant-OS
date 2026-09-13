@@ -69,77 +69,109 @@ export default function POSPage() {
   };
 
   return (
-    <div className="flex h-full">
+    <div className="flex h-full text-[var(--color-brand-ivory)] font-sans">
       {/* Tables Grid */}
-      <div className="flex-1 p-6 overflow-y-auto">
-        <h1 className="text-3xl font-serif mb-8 text-foreground">Floor Plan</h1>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {tables.map(table => {
-            const isOccupied = table.status !== 'available';
-            const statusColors: any = {
-              available: 'bg-green-500/10 text-green-700 border-green-500/20',
-              occupied: 'bg-[var(--color-brand-charcoal)]/5 text-foreground border-[var(--color-brand-charcoal)]/10',
-              ordering: 'bg-blue-500/10 text-blue-700 border-blue-500/20',
-              payment_required: 'bg-red-500/10 text-red-700 border-red-500/20',
-            };
-            const colorClass = statusColors[table.status] || statusColors.available;
+      <div className="flex-1 p-8 overflow-y-auto bg-[var(--color-brand-bg-surface)] relative">
+        <div className="flex justify-between items-end mb-10">
+          <h1 className="text-3xl font-serif">Tables</h1>
+          <div className="flex items-center gap-8">
+            <div className="flex bg-[#1A1A1A] rounded p-1">
+              <button className="px-4 py-1.5 text-xs tracking-wider bg-[var(--color-brand-bg-surface)] text-[var(--color-brand-ivory)] rounded shadow">Floor Plan</button>
+              <button className="px-4 py-1.5 text-xs tracking-wider text-[var(--color-brand-grey)] hover:text-[var(--color-brand-ivory)]">List View</button>
+            </div>
+            <div className="flex gap-4 text-xs tracking-widest uppercase text-[var(--color-brand-grey)]">
+              <span className="flex items-center gap-2"><div className="w-2 h-2 rounded-full bg-[var(--color-status-green)]" /> Available</span>
+              <span className="flex items-center gap-2"><div className="w-2 h-2 rounded-full bg-[var(--color-status-red)]" /> Occupied</span>
+              <span className="flex items-center gap-2"><div className="w-2 h-2 rounded-full bg-[var(--color-status-amber)]" /> Ordered</span>
+            </div>
+          </div>
+        </div>
 
-            return (
-              <button
-                key={table.id}
-                onClick={() => handleTableClick(table)}
-                className={`p-6 rounded-2xl border flex flex-col items-center justify-center gap-2 aspect-square hover:scale-105 transition-transform ${colorClass} ${selectedTable?.id === table.id ? 'ring-2 ring-[var(--color-brand-gold)] shadow-lg' : 'shadow-sm'}`}
-              >
-                <span className="text-3xl font-serif font-bold">T{table.table_number}</span>
-                <span className="text-xs uppercase tracking-widest font-medium">{table.status.replace('_', ' ')}</span>
-              </button>
-            );
-          })}
+        {/* Mock Floorplan background */}
+        <div className="relative w-full max-w-4xl mx-auto bg-[#1A1A1A]/30 border border-white/5 rounded-2xl p-12 min-h-[600px]">
+          <div className="grid grid-cols-3 md:grid-cols-4 gap-x-12 gap-y-16 justify-items-center">
+            {tables.map(table => {
+              const statusColors: any = {
+                available: 'bg-[var(--color-brand-bg-elevated)] border-[var(--color-status-green)] text-[var(--color-brand-ivory)]',
+                occupied: 'bg-[var(--color-status-red)] border-transparent text-white',
+                ordering: 'bg-[var(--color-status-amber)] border-transparent text-white',
+                payment_required: 'bg-[var(--color-status-amber)] border-transparent text-white',
+              };
+              const colorClass = statusColors[table.status] || statusColors.available;
+
+              return (
+                <button
+                  key={table.id}
+                  onClick={() => handleTableClick(table)}
+                  className={`relative w-24 h-24 rounded-full border-2 flex items-center justify-center transition-all ${colorClass} ${selectedTable?.id === table.id ? 'ring-4 ring-[var(--color-brand-gold)]/30 ring-offset-4 ring-offset-[var(--color-brand-bg-surface)] scale-110' : 'hover:scale-105'} shadow-[0_10px_20px_rgba(0,0,0,0.4)]`}
+                >
+                  <span className="text-xl font-serif font-bold">{table.table_number}</span>
+                  {/* Chairs mock */}
+                  <div className="absolute -top-3 w-6 h-2 bg-white/10 rounded-full" />
+                  <div className="absolute -bottom-3 w-6 h-2 bg-white/10 rounded-full" />
+                  <div className="absolute -left-3 w-2 h-6 bg-white/10 rounded-full" />
+                  <div className="absolute -right-3 w-2 h-6 bg-white/10 rounded-full" />
+                </button>
+              );
+            })}
+          </div>
         </div>
       </div>
 
       {/* POS Sidebar */}
-      <div className="w-96 bg-white dark:bg-[var(--color-brand-nearblack)] border-l border-[var(--color-brand-charcoal)]/10 flex flex-col shadow-xl z-10 shrink-0">
+      <div className="w-[400px] bg-[var(--color-brand-bg-dark)] border-l border-white/5 flex flex-col shadow-2xl z-10 shrink-0">
         {selectedTable ? (
           <>
-            <div className="p-6 border-b border-[var(--color-brand-charcoal)]/10 bg-[var(--color-brand-charcoal)]/5">
+            <div className="p-8 border-b border-white/5">
               <h2 className="text-2xl font-serif">Table {selectedTable.table_number}</h2>
-              <p className="text-sm text-foreground/60 uppercase tracking-widest mt-1">{selectedTable.status.replace('_', ' ')}</p>
+              <p className="text-xs text-[var(--color-brand-grey)] uppercase tracking-[0.2em] mt-1">{selectedTable.status.replace('_', ' ')}</p>
             </div>
             
-            <div className="flex-1 overflow-y-auto p-6 space-y-6">
+            <div className="flex-1 overflow-y-auto p-8 space-y-6">
+              <h3 className="text-[10px] uppercase tracking-widest text-[var(--color-brand-grey)] border-b border-white/5 pb-2">Current Order</h3>
               {orders.length === 0 ? (
-                <div className="text-center text-foreground/50 py-12">No open orders</div>
+                <div className="text-[var(--color-brand-grey)] py-8 text-sm italic font-serif">No open orders for this table.</div>
               ) : (
                 orders.map(order => (
-                  <div key={order.id} className="border border-[var(--color-brand-charcoal)]/10 rounded-xl overflow-hidden">
-                    <div className="bg-[var(--color-brand-charcoal)]/5 px-4 py-2 flex justify-between text-sm font-medium">
-                      <span>Order #{order.id.split('-')[0].toUpperCase()}</span>
-                      <span className="uppercase text-[var(--color-brand-gold)]">{order.status}</span>
+                  <div key={order.id} className="space-y-4">
+                    <div className="flex justify-between text-xs tracking-widest text-[var(--color-brand-grey)] uppercase">
+                      <span>#{order.id.split('-')[0]}</span>
+                      <span className="text-[var(--color-brand-gold)]">{order.status}</span>
                     </div>
-                    <div className="p-4 space-y-3">
+                    <div className="space-y-4">
                       {order.order_items?.map((item: any) => (
                         <div key={item.id} className="flex justify-between text-sm">
-                          <div>
-                            <span className="font-medium mr-2">{item.quantity}x</span>
-                            {item.name}
+                          <div className="flex gap-4">
+                            <span className="text-[var(--color-brand-grey)]">{item.quantity}</span>
+                            <span>{item.name}</span>
                           </div>
-                          <span>${Number(item.total_price).toFixed(2)}</span>
+                          <span>£{Number(item.total_price).toFixed(2)}</span>
                         </div>
                       ))}
                     </div>
-                    <div className="p-4 bg-[var(--color-brand-charcoal)]/5 border-t border-[var(--color-brand-charcoal)]/10">
-                      <div className="flex justify-between font-serif text-lg">
+                    
+                    <div className="pt-6 border-t border-white/5 space-y-4">
+                      <div className="flex justify-between font-serif text-xl">
                         <span>Total</span>
-                        <span>${Number(order.total).toFixed(2)}</span>
+                        <span>£{Number(order.total).toFixed(2)}</span>
                       </div>
-                      <button 
-                        onClick={() => processPayment(order.id)}
-                        className="w-full mt-4 bg-[var(--color-brand-nearblack)] dark:bg-[var(--color-brand-ivory)] dark:text-[var(--color-brand-nearblack)] text-white py-3 rounded-lg flex items-center justify-center gap-2 hover:opacity-90"
-                      >
-                        <CreditCard className="w-5 h-5" />
-                        <span>Checkout</span>
-                      </button>
+                      
+                      <div className="flex flex-col gap-3 pt-4">
+                        <div className="grid grid-cols-2 gap-3">
+                          <button className="bg-transparent border border-white/10 text-[var(--color-brand-ivory)] py-3 rounded text-xs tracking-widest uppercase hover:bg-white/5 transition-colors">
+                            View Order
+                          </button>
+                          <button className="bg-[var(--color-brand-bg-elevated)] text-[var(--color-brand-ivory)] py-3 rounded text-xs tracking-widest uppercase hover:bg-white/5 transition-colors">
+                            Add Item
+                          </button>
+                        </div>
+                        <button 
+                          onClick={() => processPayment(order.id)}
+                          className="w-full bg-[var(--color-brand-gold)] text-[var(--color-brand-bg-dark)] py-4 rounded font-sans font-medium text-sm tracking-[0.1em] uppercase hover:bg-[var(--color-brand-gold-light)] transition-colors shadow-[0_0_15px_rgba(201,164,92,0.1)]"
+                        >
+                          Take Payment
+                        </button>
+                      </div>
                     </div>
                   </div>
                 ))
@@ -147,9 +179,11 @@ export default function POSPage() {
             </div>
           </>
         ) : (
-          <div className="flex-1 flex flex-col items-center justify-center text-foreground/40 p-6 text-center">
-            <Receipt className="w-16 h-16 mb-4 opacity-50" />
-            <p className="text-lg font-serif">Select a table to view orders and process payments.</p>
+          <div className="flex-1 flex flex-col items-center justify-center text-[var(--color-brand-grey)] p-8 text-center">
+            <div className="w-16 h-16 rounded-full border border-white/10 flex items-center justify-center mb-6">
+              <Receipt className="w-6 h-6 text-white/20" />
+            </div>
+            <p className="text-lg font-serif">Select a table to manage</p>
           </div>
         )}
       </div>

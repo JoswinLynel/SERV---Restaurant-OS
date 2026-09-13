@@ -85,9 +85,9 @@ export default function BasketPage() {
 
   if (itemCount === 0) {
     return (
-      <div className="min-h-screen bg-background flex flex-col items-center justify-center p-6 text-center">
-        <h2 className="text-2xl font-serif text-foreground mb-4">Your basket is empty</h2>
-        <Link href={backUrl} className="text-[var(--color-brand-gold)] font-medium underline underline-offset-4">
+      <div className="min-h-screen bg-[var(--color-brand-bg-dark)] flex flex-col items-center justify-center p-6 text-center text-[var(--color-brand-ivory)]">
+        <h2 className="text-2xl font-serif mb-4 tracking-wide">Your order is empty</h2>
+        <Link href={backUrl} className="text-[var(--color-brand-gold)] font-sans font-medium uppercase tracking-widest text-xs border-b border-[var(--color-brand-gold)] pb-1 hover:text-[var(--color-brand-gold-light)] transition-colors">
           Return to Menu
         </Link>
       </div>
@@ -95,76 +95,85 @@ export default function BasketPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
-      <header className="sticky top-0 z-10 bg-background/80 backdrop-blur-md border-b border-[var(--color-brand-charcoal)]/10 px-6 py-4 flex items-center gap-4">
-        <Link href={backUrl} className="p-2 -ml-2 rounded-full hover:bg-[var(--color-brand-charcoal)]/5">
-          <ArrowLeft className="w-6 h-6" />
+    <div className="min-h-screen bg-[var(--color-brand-bg-dark)] text-[var(--color-brand-ivory)] flex flex-col font-sans">
+      <header className="sticky top-0 z-10 bg-[var(--color-brand-bg-dark)]/90 backdrop-blur-md px-6 py-6 flex items-center justify-between border-b border-white/5">
+        <Link href={backUrl} className="text-[var(--color-brand-grey)] hover:text-[var(--color-brand-ivory)] transition-colors">
+          <ArrowLeft className="w-5 h-5" />
         </Link>
-        <h1 className="text-xl font-serif tracking-tight text-foreground">Your Basket</h1>
+        <button className="text-[var(--color-brand-gold)] text-xs uppercase tracking-widest font-medium">Edit</button>
       </header>
 
-      <main className="flex-1 overflow-y-auto px-6 py-8 space-y-6">
-        {items.map(item => {
-          const modTotal = item.modifiers.reduce((acc, m) => acc + Number(m.price_adjustment), 0);
-          const itemPrice = Number(item.price) + modTotal;
-          
-          return (
-            <div key={item.id} className="flex gap-4 p-4 rounded-xl border border-[var(--color-brand-charcoal)]/10">
-              <div className="flex-1">
-                <div className="flex justify-between">
-                  <h3 className="font-medium text-lg">{item.name}</h3>
-                  <span className="font-serif">${(itemPrice * item.quantity).toFixed(2)}</span>
+      <main className="flex-1 overflow-y-auto px-6 py-8 space-y-8 max-w-lg mx-auto w-full">
+        <div>
+          <h1 className="text-3xl font-serif text-[var(--color-brand-ivory)] mb-2">Your Order</h1>
+          <p className="text-xs uppercase tracking-widest text-[var(--color-brand-grey)]">Table {params.tableId}</p>
+        </div>
+
+        <div className="space-y-6">
+          {items.map(item => {
+            const modTotal = item.modifiers.reduce((acc, m) => acc + Number(m.price_adjustment), 0);
+            const itemPrice = Number(item.price) + modTotal;
+            
+            return (
+              <div key={item.id} className="flex gap-4 border-b border-white/5 pb-6">
+                <div className="w-16 h-16 bg-[var(--color-brand-bg-elevated)] rounded shrink-0 flex items-center justify-center">
+                   {/* In a real app we'd have the image_url here too, for now placeholder */}
+                   <span className="text-[var(--color-brand-grey)]/30 font-serif italic text-[10px]">SERVÉ</span>
                 </div>
-                {item.modifiers.length > 0 && (
-                  <div className="text-sm text-foreground/60 mt-1">
-                    {item.modifiers.map(m => m.name).join(", ")}
+                <div className="flex-1 flex flex-col justify-center">
+                  <div className="flex justify-between items-start">
+                    <h3 className="font-serif text-[var(--color-brand-ivory)] text-lg leading-tight">{item.name}</h3>
+                    <div className="flex items-center gap-6">
+                      <span className="text-[var(--color-brand-grey)] text-sm">{item.quantity}</span>
+                      <span className="font-sans font-medium text-sm">£{(itemPrice * item.quantity).toFixed(0)}</span>
+                    </div>
                   </div>
-                )}
-                
-                <div className="flex items-center gap-4 mt-4">
-                  <div className="flex items-center gap-4 bg-[var(--color-brand-charcoal)]/5 rounded-full px-3 py-1.5">
-                    <button onClick={() => updateQuantity(item.id, item.quantity - 1)}>
-                      <Minus className="w-4 h-4" />
-                    </button>
-                    <span className="font-medium w-4 text-center">{item.quantity}</span>
-                    <button onClick={() => updateQuantity(item.id, item.quantity + 1)}>
-                      <Plus className="w-4 h-4" />
-                    </button>
-                  </div>
-                  <button onClick={() => removeItem(item.id)} className="text-red-500/80 p-2 hover:bg-red-500/10 rounded-full transition-colors">
-                    <Trash2 className="w-4 h-4" />
-                  </button>
+                  {item.modifiers.length > 0 && (
+                    <div className="text-xs text-[var(--color-brand-grey)] mt-1">
+                      {item.modifiers.map(m => m.name).join(", ")}
+                    </div>
+                  )}
                 </div>
               </div>
-            </div>
-          );
-        })}
-      </main>
+            );
+          })}
+        </div>
 
-      <div className="p-6 border-t border-[var(--color-brand-charcoal)]/10 bg-background shrink-0">
-        <div className="space-y-2 mb-6">
-          <div className="flex justify-between text-foreground/70">
+        <button className="flex items-center gap-2 text-xs font-medium text-[var(--color-brand-grey)] hover:text-[var(--color-brand-ivory)] transition-colors">
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
+          Add a note (optional)
+        </button>
+
+        <div className="space-y-4 pt-4">
+          <div className="flex justify-between text-[var(--color-brand-ivory)] text-sm">
             <span>Subtotal</span>
-            <span>${total.toFixed(2)}</span>
-          </div>
-          <div className="flex justify-between text-foreground/70">
-            <span>Tax (10%)</span>
-            <span>${(total * 0.1).toFixed(2)}</span>
-          </div>
-          <div className="flex justify-between text-xl font-serif pt-4 border-t border-[var(--color-brand-charcoal)]/10">
-            <span>Total</span>
-            <span>${(total * 1.1).toFixed(2)}</span>
+            <span className="font-medium">£{total.toFixed(0)}</span>
           </div>
         </div>
 
-        <button 
-          onClick={submitOrder}
-          disabled={isSubmitting}
-          className="w-full bg-[var(--color-brand-nearblack)] dark:bg-[var(--color-brand-ivory)] dark:text-[var(--color-brand-nearblack)] text-white py-4 rounded-xl font-medium tracking-wide hover:opacity-90 transition-opacity shadow-lg disabled:opacity-50 flex justify-center items-center gap-2"
-        >
-          {isSubmitting ? "Sending to Kitchen..." : "Submit Order"}
-        </button>
-      </div>
+        <div className="space-y-3 pt-6 border-t border-white/5">
+          <button 
+            onClick={submitOrder}
+            disabled={isSubmitting}
+            className="w-full bg-[var(--color-brand-gold)] text-[var(--color-brand-bg-dark)] py-4 rounded font-sans font-medium text-sm tracking-[0.1em] uppercase shadow-[0_0_15px_rgba(201,164,92,0.1)] hover:bg-[var(--color-brand-gold-light)] transition-colors disabled:opacity-50"
+          >
+            {isSubmitting ? "Processing..." : "Proceed to Payment"}
+          </button>
+          
+          <button className="w-full bg-[var(--color-brand-bg-elevated)] text-[var(--color-brand-ivory)] py-4 rounded font-sans font-medium text-sm flex justify-center items-center gap-2 border border-white/10 hover:bg-white/5 transition-colors">
+            Buy with <span className="font-bold">Apple Pay</span>
+          </button>
+
+          <button className="w-full bg-[var(--color-brand-bg-elevated)] text-[var(--color-brand-ivory)] py-4 rounded font-sans font-medium text-sm flex justify-center items-center gap-2 border border-white/10 hover:bg-white/5 transition-colors">
+            Pay with <span className="font-bold">G Pay</span>
+          </button>
+          
+          <button className="w-full bg-[var(--color-brand-bg-elevated)] text-[var(--color-brand-ivory)] py-4 rounded font-sans font-medium text-sm flex justify-center items-center gap-2 border border-white/10 hover:bg-white/5 transition-colors">
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" /></svg>
+            Pay with Card
+          </button>
+        </div>
+      </main>
     </div>
   );
 }
