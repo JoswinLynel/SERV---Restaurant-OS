@@ -36,68 +36,29 @@ export default function BasketPage() {
     fetchTableNumber();
   }, [tableId, supabase]);
 
-  const submitOrder = async (paymentMethod: "apple_pay" | "card") => {
+  const submitOrder = async () => {
     if (items.length === 0) return;
     setIsSubmitting(true);
 
     try {
-      const { data: order, error: orderError } = await supabase
-        .from("orders")
-        .insert({
-          restaurant_id: restaurantId,
-          table_id: tableId,
-          subtotal: total,
-          tax: 0,
-          total: total,
-          status: "pending",
-          payment_status: "unpaid",
-        })
-        .select()
-        .single();
+      // Create a simplified item array for the server action
+      const actionItems = items.map(item => ({
+        menu_item_id: item.menu_item_id,
+        quantity: item.quantity,
+        modifiers: item.modifiers.map(m => ({ id: m.id, name: m.name })),
+        notes: item.notes
+      }));
 
-      if (orderError) throw orderError;
-
-      for (const item of items) {
-        const modifierTotal = item.modifiers.reduce(
-          (acc, m) => acc + Number(m.price_adjustment),
-          0
-        );
-        const unitPrice = Number(item.price) + modifierTotal;
-        const { data: orderItem, error: oiError } = await supabase
-          .from("order_items")
-          .insert({
-            order_id: order.id,
-            menu_item_id: item.menu_item_id,
-            name: item.name,
-            quantity: item.quantity,
-            unit_price: unitPrice,
-            total_price: unitPrice * item.quantity,
-            notes: item.notes || "",
-          })
-          .select()
-          .single();
-
-        if (oiError) throw oiError;
-
-        if (item.modifiers.length > 0) {
-          const modifiersToInsert = item.modifiers.map((m) => ({
-            order_item_id: orderItem.id,
-            name: m.name,
-            price_adjustment: m.price_adjustment,
-          }));
-          await supabase
-            .from("order_item_modifiers")
-            .insert(modifiersToInsert);
-        }
+      const { createCheckoutSession } = await import("@/actions/checkout");
+      const { url } = await createCheckoutSession(restaurantId, tableId, actionItems);
+      
+      if (url) {
+        window.location.href = url;
       }
-
-      clearBasket();
-      router.push(`${backUrl}/success?order=${order.id}`);
-    } catch (err) {
+    } catch (err: any) {
       console.error(err);
-      alert("Failed to submit order. Please try again.");
-    } finally {
-      setIsSubmitting(false);
+      alert(err.message || "Failed to initiate checkout. Please try again.");
+      setIsSubmitting(false); // only stop submitting if it fails, otherwise it's redirecting
     }
   };
 
@@ -246,7 +207,7 @@ export default function BasketPage() {
               </p>
 
               <button
-                onClick={() => submitOrder("apple_pay")}
+                onClick={() => submitOrder()}
                 disabled={isSubmitting}
                 className="w-full bg-[var(--color-brand-bg-elevated)] text-[var(--color-brand-ivory)] py-4 rounded font-sans font-medium text-sm flex justify-center items-center gap-2 border border-white/10 hover:bg-white/5 transition-colors disabled:opacity-50 cursor-pointer"
               >
@@ -261,7 +222,7 @@ export default function BasketPage() {
               </button>
 
               <button
-                onClick={() => submitOrder("card")}
+                onClick={() => submitOrder()}
                 disabled={isSubmitting}
                 className="w-full bg-[var(--color-brand-bg-elevated)] text-[var(--color-brand-ivory)] py-4 rounded font-sans font-medium text-sm flex justify-center items-center gap-2 border border-white/10 hover:bg-white/5 transition-colors disabled:opacity-50 cursor-pointer"
               >

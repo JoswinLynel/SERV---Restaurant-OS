@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { createClient } from "@/lib/supabase/client";
-import { CreditCard, Receipt } from "lucide-react";
+import { Grid, Search, Plus, Minus, CreditCard, Clock, Receipt, Banknote } from "lucide-react";
+import { useRealtimeSync } from "@/hooks/useRealtimeSync";
 
 export default function POSPage() {
   const [tables, setTables] = useState<any[]>([]);
@@ -59,21 +60,15 @@ export default function POSPage() {
   };
 
   useEffect(() => {
-    if (!restaurantId) return;
     fetchTables();
-    
-    const channel = supabase
-      .channel('pos-tables')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'tables', filter: `restaurant_id=eq.${restaurantId}` }, () => fetchTables())
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'orders', filter: `restaurant_id=eq.${restaurantId}` }, (payload) => {
-        if (selectedTable) {
-          fetchTableOrders(selectedTable.id);
-        }
-      })
-      .subscribe();
+  }, [supabase, restaurantId]);
 
-    return () => { supabase.removeChannel(channel); };
-  }, [supabase, selectedTable, restaurantId]);
+  useRealtimeSync(restaurantId, () => {
+    fetchTables();
+    if (selectedTable) {
+      fetchTableOrders(selectedTable.id);
+    }
+  });
 
   const handleTableClick = (table: any) => {
     setSelectedTable(table);

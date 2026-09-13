@@ -5,6 +5,7 @@ import { useSearchParams, useRouter, useParams, usePathname } from "next/navigat
 import { createClient } from "@/lib/supabase/client";
 import { Check, ChevronDown, ChevronUp } from "lucide-react";
 import Link from "next/link";
+import { useBasket } from "@/components/customer/BasketContext";
 
 export default function SuccessPage() {
   const searchParams = useSearchParams();
@@ -15,8 +16,13 @@ export default function SuccessPage() {
   const router = useRouter();
   const pathname = usePathname();
   const params = useParams();
+  const { clearBasket } = useBasket();
 
   const menuUrl = pathname.replace("/success", "");
+
+  useEffect(() => {
+    clearBasket();
+  }, [clearBasket]);
 
   useEffect(() => {
     if (!orderId) return;

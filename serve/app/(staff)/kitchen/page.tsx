@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { Clock } from "lucide-react";
+import { useRealtimeSync } from "@/hooks/useRealtimeSync";
 
 export default function KitchenDisplaySystem() {
   const [orders, setOrders] = useState<any[]>([]);
@@ -51,24 +52,10 @@ export default function KitchenDisplaySystem() {
   };
 
   useEffect(() => {
-    if (!restaurantId) return;
     fetchOrders();
+  }, [restaurantId, supabase]);
 
-    const channel = supabase
-      .channel('kitchen-orders')
-      .on(
-        'postgres_changes',
-        { event: '*', schema: 'public', table: 'orders', filter: `restaurant_id=eq.${restaurantId}` },
-        (payload) => {
-          fetchOrders(); // Re-fetch to get nested relations easily, or selectively update state
-        }
-      )
-      .subscribe();
-
-    return () => {
-      supabase.removeChannel(channel);
-    };
-  }, [supabase, restaurantId]);
+  useRealtimeSync(restaurantId, fetchOrders);
 
   const updateOrderStatus = async (orderId: string, newStatus: string) => {
     await supabase.from("orders").update({ status: newStatus }).eq("id", orderId);
