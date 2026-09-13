@@ -20,8 +20,11 @@ export default function KitchenDisplaySystem() {
           .single();
         if (staffData) {
           setRestaurantId(staffData.restaurant_id);
+          return;
         }
       }
+      // Demo fallback: default to Madras Table if not logged in
+      setRestaurantId("20000000-0000-0000-0000-000000000002");
     };
     initAuth();
   }, [supabase]);
