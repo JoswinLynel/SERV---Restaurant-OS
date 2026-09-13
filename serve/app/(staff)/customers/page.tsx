@@ -69,40 +69,54 @@ export default function CustomersPage() {
   useRealtimeSync(restaurantId, fetchOrders);
 
   // Derived metrics
-  const totalAnonymousSpend = useMemo(() => {
-    let sum = 0;
+  const { totalAnonymousSpend, totalIdentifiedSpend, anonymousOrderCount, identifiedOrderCount } = useMemo(() => {
+    let anonSpend = 0;
+    let idSpend = 0;
+    let anonCount = 0;
+    let idCount = 0;
+
     orders.forEach(order => {
+      let isIdentified = !!order.customer_name;
+      if (isIdentified) idCount++;
+      else anonCount++;
+
       if (order.payments && Array.isArray(order.payments)) {
-        // Find successful payments
         order.payments.forEach((p: any) => {
           if (p.status === "succeeded") {
-            sum += Number(p.amount);
+            if (isIdentified) idSpend += Number(p.amount);
+            else anonSpend += Number(p.amount);
           }
         });
       }
     });
-    return sum;
+
+    return {
+      totalAnonymousSpend: anonSpend,
+      totalIdentifiedSpend: idSpend,
+      anonymousOrderCount: anonCount,
+      identifiedOrderCount: idCount,
+    };
   }, [orders]);
 
-  const anonymousOrderCount = orders.length; // Currently all are anonymous
-
-  // We have no identified customers, so filter logic is simple:
-  // "IDENTIFIED" always shows empty
-  // "ANONYMOUS" or "ALL" shows the orders
-
   const displayedOrders = useMemo(() => {
-    if (filter === "IDENTIFIED") return [];
+    let filtered = orders;
     
-    // Apply search if present (searching by order ID or table number)
+    if (filter === "IDENTIFIED") {
+      filtered = orders.filter(o => !!o.customer_name);
+    } else if (filter === "ANONYMOUS") {
+      filtered = orders.filter(o => !o.customer_name);
+    }
+    
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase();
-      return orders.filter(o => 
+      filtered = filtered.filter(o => 
         o.id.toLowerCase().includes(q) || 
-        o.tables?.table_number?.toLowerCase().includes(q)
+        o.tables?.table_number?.toLowerCase().includes(q) ||
+        (o.customer_name && o.customer_name.toLowerCase().includes(q))
       );
     }
     
-    return orders;
+    return filtered;
   }, [orders, filter, searchQuery]);
 
   if (loading) {
@@ -126,11 +140,11 @@ export default function CustomersPage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="bg-[var(--color-brand-bg-dark)] border border-white/5 p-6 rounded-lg relative overflow-hidden">
               <div className="flex justify-between items-start mb-4">
-                <h3 className="text-[10px] uppercase tracking-[0.2em] text-[var(--color-brand-grey)]">Total Identified</h3>
+                <h3 className="text-[10px] uppercase tracking-[0.2em] text-[var(--color-brand-grey)]">Identified Orders</h3>
                 <Users className="w-4 h-4 text-white/40" />
               </div>
-              <p className="text-3xl font-serif">0</p>
-              <p className="text-xs text-[var(--color-brand-grey)] mt-2">Identified customers</p>
+              <p className="text-3xl font-serif">{identifiedOrderCount}</p>
+              <p className="text-xs text-[var(--color-brand-grey)] mt-2">Orders with guest names</p>
             </div>
             
             <div className="bg-[var(--color-brand-bg-dark)] border border-[var(--color-brand-gold)]/20 p-6 rounded-lg relative overflow-hidden">
@@ -144,10 +158,10 @@ export default function CustomersPage() {
 
             <div className="bg-[var(--color-brand-bg-dark)] border border-[var(--color-brand-gold)]/20 p-6 rounded-lg relative overflow-hidden">
               <div className="flex justify-between items-start mb-4">
-                <h3 className="text-[10px] uppercase tracking-[0.2em] text-[var(--color-brand-gold)]">Anonymous Spend</h3>
+                <h3 className="text-[10px] uppercase tracking-[0.2em] text-[var(--color-brand-gold)]">Identified Spend</h3>
                 <CreditCard className="w-4 h-4 text-[var(--color-brand-gold)]" />
               </div>
-              <p className="text-3xl font-serif text-[var(--color-brand-gold)]">£{totalAnonymousSpend.toFixed(2)}</p>
+              <p className="text-3xl font-serif text-[var(--color-brand-gold)]">£{totalIdentifiedSpend.toFixed(2)}</p>
               <p className="text-xs text-[var(--color-brand-grey)] mt-2">From successful payments</p>
             </div>
           </div>
@@ -221,11 +235,11 @@ export default function CustomersPage() {
                       <tr key={order.id} className="hover:bg-white/[0.02] transition-colors group">
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="flex items-center gap-3">
-                            <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-[var(--color-brand-grey)] border border-white/10">
-                              ?
+                            <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-[var(--color-brand-ivory)] font-serif border border-white/10">
+                              {order.customer_name ? order.customer_name.charAt(0).toUpperCase() : '?'}
                             </div>
                             <div>
-                              <div className="font-medium">Anonymous</div>
+                              <div className="font-medium text-[var(--color-brand-ivory)]">{order.customer_name || 'Anonymous'}</div>
                               <div className="text-xs text-[var(--color-brand-grey)]">Guest</div>
                             </div>
                           </div>

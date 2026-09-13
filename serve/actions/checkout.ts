@@ -12,10 +12,17 @@ export async function createCheckoutSession(
     quantity: number;
     modifiers: { id: string; name: string }[];
     notes?: string;
-  }[]
+  }[],
+  customerName?: string
 ) {
   if (!items || items.length === 0) {
     throw new Error("Basket is empty");
+  }
+
+  let validCustomerName = customerName?.trim();
+  if (validCustomerName) {
+    if (validCustomerName.length === 0) validCustomerName = undefined;
+    else if (validCustomerName.length > 50) validCustomerName = validCustomerName.substring(0, 50);
   }
 
   const supabase = await createClient();
@@ -95,6 +102,7 @@ export async function createCheckoutSession(
     .insert({
       restaurant_id: restaurantId,
       table_id: tableId,
+      customer_name: validCustomerName || null,
       subtotal: totalAmount,
       tax: 0,
       total: totalAmount,

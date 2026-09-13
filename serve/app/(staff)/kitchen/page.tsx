@@ -106,7 +106,7 @@ export default function KitchenDisplaySystem() {
                         <div className="flex justify-between items-start mb-6 border-b border-white/5 pb-4">
                           <div>
                             <span className="text-3xl font-serif text-[var(--color-brand-ivory)]">
-                              {order.tables ? `Table ${order.tables.table_number}` : 'Takeaway'}
+                              {order.customer_name ? `${order.customer_name} · ` : ''}{order.tables ? `Table ${order.tables.table_number}` : 'Takeaway'}
                             </span>
                             <p className="text-[10px] text-[var(--color-brand-grey)] mt-2 uppercase tracking-widest">Order #{order.id.split('-')[0]}</p>
                           </div>

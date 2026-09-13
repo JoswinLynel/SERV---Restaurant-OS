@@ -3,6 +3,8 @@ import { notFound } from "next/navigation";
 import { MenuItemCard } from "@/components/customer/MenuItemCard";
 import { FloatingBasket } from "@/components/customer/FloatingBasket";
 import { CategoryNav } from "@/components/customer/CategoryNav";
+import { CustomerNameGuard } from "@/components/customer/CustomerNameGuard";
+import { CustomerHeaderIndicator } from "@/components/customer/CustomerHeaderIndicator";
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -63,52 +65,58 @@ export default async function MenuPage({
   });
 
   return (
-    <div className="min-h-screen bg-[var(--color-brand-bg-dark)] text-[var(--color-brand-ivory)] pb-24 font-sans">
-      {/* Header */}
-      <header className="sticky top-0 z-10 bg-[var(--color-brand-bg-dark)]/90 backdrop-blur-md px-6 py-6 flex flex-col items-center border-b border-white/5">
-        <div className="w-full flex justify-between items-start mb-2">
-          <div className="flex-1" />
-          <div className="flex-1 flex justify-center">
-            {/* Minimal Logo Mark */}
-            <svg width="24" height="24" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" className="opacity-80">
-              <path d="M20 0L23.5 16.5L40 20L23.5 23.5L20 40L16.5 23.5L0 20L16.5 16.5L20 0Z" fill="var(--color-brand-gold)"/>
-            </svg>
-          </div>
-          <div className="flex-1 flex justify-end">
-            <span className="text-[10px] uppercase tracking-widest text-[var(--color-brand-grey)] flex items-center gap-1 cursor-pointer">
-              EN <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
-            </span>
-          </div>
-        </div>
-        <h1 className="text-xl font-serif tracking-widest uppercase text-[var(--color-brand-ivory)] mt-2">
-          {restaurant.name}
-        </h1>
-        <p className="text-[10px] text-[var(--color-brand-grey)] uppercase tracking-[0.2em] mt-1">
-          Table {table.table_number}
-        </p>
-      </header>
-
-      {/* Categories Nav — client component with scrollspy */}
-      <CategoryNav categories={categories.map((c: any) => ({ id: c.id, name: c.name }))} />
-
-      {/* Menu Content */}
-      <main className="px-4 sm:px-8 lg:px-12 py-8 space-y-16 max-w-6xl mx-auto w-full">
-        {categories.map((category: any) => (
-          <section key={category.id} id={`category-${category.id}`} style={{ scrollMarginTop: '160px' }}>
-            <h2 className="text-2xl font-serif mb-6 px-2 text-[var(--color-brand-ivory)] border-b border-white/5 pb-4">
-              {category.name}
-            </h2>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-1">
-              {category.menu_items.map((item: any) => (
-                <MenuItemCard key={item.id} item={item} restaurantId={restaurantId} />
-              ))}
+    <CustomerNameGuard 
+      restaurantId={restaurantId} 
+      tableId={tableId} 
+      restaurantName={restaurant.name}
+      tableNumber={table.table_number}
+    >
+      <div className="min-h-screen bg-[var(--color-brand-bg-dark)] text-[var(--color-brand-ivory)] pb-24 font-sans">
+        {/* Header */}
+        <header className="sticky top-0 z-10 bg-[var(--color-brand-bg-dark)]/90 backdrop-blur-md px-6 py-6 flex flex-col items-center border-b border-white/5">
+          <div className="w-full flex justify-between items-start mb-2">
+            <div className="flex-1 flex justify-start">
+              <CustomerHeaderIndicator restaurantId={restaurantId} tableId={tableId} tableNumber={table.table_number} />
             </div>
-          </section>
-        ))}
-      </main>
+            <div className="flex-1 flex justify-center">
+              {/* Minimal Logo Mark */}
+              <svg width="24" height="24" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" className="opacity-80 mt-1">
+                <path d="M20 0L23.5 16.5L40 20L23.5 23.5L20 40L16.5 23.5L0 20L16.5 16.5L20 0Z" fill="var(--color-brand-gold)"/>
+              </svg>
+            </div>
+            <div className="flex-1 flex justify-end">
+            </div>
+          </div>
+          <h1 className="text-xl font-serif tracking-widest uppercase text-[var(--color-brand-ivory)] mt-2">
+            {restaurant.name}
+          </h1>
+          <p className="text-[10px] text-[var(--color-brand-grey)] uppercase tracking-[0.2em] mt-1">
+            Table {table.table_number}
+          </p>
+        </header>
 
-      {/* Floating Basket Button */}
-      <FloatingBasket />
-    </div>
+        {/* Categories Nav — client component with scrollspy */}
+        <CategoryNav categories={categories.map((c: any) => ({ id: c.id, name: c.name }))} />
+
+        {/* Menu Content */}
+        <main className="px-4 sm:px-8 lg:px-12 py-8 space-y-16 max-w-6xl mx-auto w-full">
+          {categories.map((category: any) => (
+            <section key={category.id} id={`category-${category.id}`} style={{ scrollMarginTop: '160px' }}>
+              <h2 className="text-2xl font-serif mb-6 px-2 text-[var(--color-brand-ivory)] border-b border-white/5 pb-4">
+                {category.name}
+              </h2>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-1">
+                {category.menu_items.map((item: any) => (
+                  <MenuItemCard key={item.id} item={item} restaurantId={restaurantId} />
+                ))}
+              </div>
+            </section>
+          ))}
+        </main>
+
+        {/* Floating Basket Button */}
+        <FloatingBasket />
+      </div>
+    </CustomerNameGuard>
   );
 }

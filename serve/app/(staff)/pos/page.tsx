@@ -150,7 +150,10 @@ export default function POSPage() {
                 orders.map(order => (
                   <div key={order.id} className="space-y-4">
                     <div className="flex justify-between text-xs tracking-widest text-[var(--color-brand-grey)] uppercase">
-                      <span>#{order.id.split('-')[0]}</span>
+                      <div className="flex gap-4">
+                        <span>#{order.id.split('-')[0]}</span>
+                        <span className="text-[var(--color-brand-ivory)] font-bold">{order.customer_name || 'Anonymous'}</span>
+                      </div>
                       <span className="text-[var(--color-brand-gold)]">{order.status}</span>
                     </div>
                     <div className="space-y-4">

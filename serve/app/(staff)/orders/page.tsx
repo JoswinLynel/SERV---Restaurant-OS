@@ -159,6 +159,9 @@ export default function OrdersPage() {
                 <div className="px-6 py-4 border-b border-white/5 bg-white/5 flex items-center justify-between">
                   <div className="flex items-center gap-6">
                     <span className="font-serif text-xl text-[var(--color-brand-ivory)]">Order #{order.id.split('-')[0].toUpperCase()}</span>
+                    <span className="px-3 py-1 rounded text-xs tracking-wider uppercase font-medium bg-[var(--color-brand-bg-elevated)] border border-white/10 text-[var(--color-brand-ivory)]">
+                      {order.customer_name || 'Anonymous'}
+                    </span>
                     <span className="px-3 py-1 rounded text-xs tracking-wider uppercase font-medium bg-[var(--color-brand-bg-elevated)] border border-white/10 text-[var(--color-brand-gold)]">
                       Table {order.tables?.table_number || 'Unknown'}
                     </span>

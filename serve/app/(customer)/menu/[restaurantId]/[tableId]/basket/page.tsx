@@ -73,8 +73,11 @@ export default function BasketPage() {
         notes: item.notes
       }));
 
+      const storageKey = `serve_customer_name_${restaurantId}_${tableId}`;
+      const customerName = sessionStorage.getItem(storageKey) || undefined;
+
       const { createCheckoutSession } = await import("@/actions/checkout");
-      const { url } = await createCheckoutSession(restaurantId, tableId, actionItems);
+      const { url } = await createCheckoutSession(restaurantId, tableId, actionItems, customerName);
       
       if (url) {
         window.location.href = url;
