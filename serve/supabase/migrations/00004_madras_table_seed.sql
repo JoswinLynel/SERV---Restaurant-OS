@@ -78,7 +78,7 @@ INSERT INTO menu_items (category_id, name, description, price, is_available, dis
 ('50000000-0000-0000-0000-000000000006', 'Chicken Biryani', 'Fragrant basmati rice layered with spiced chicken, saffron, fried onions, mint and aromatic spices.', 13.95, true, 1, '/images/chicken_biryani.png'),
 ('50000000-0000-0000-0000-000000000006', 'Mutton Biryani', 'Slow-cooked mutton layered with fragrant basmati rice, saffron, mint and traditional biryani spices.', 15.95, true, 2, '/images/mutton_biryani.jpg'),
 ('50000000-0000-0000-0000-000000000006', 'Prawn Biryani', 'Aromatic basmati rice cooked with succulent prawns, saffron, herbs and coastal South Indian spices.', 16.50, true, 3, '/images/prawn_biryani.jpg'),
-('50000000-0000-0000-0000-000000000006', 'Egg Biryani', 'Fragrant basmati rice layered with spiced boiled eggs, caramelised onions, mint and aromatic spices.', 11.95, true, 4, NULL);
+('50000000-0000-0000-0000-000000000006', 'Egg Biryani', 'Fragrant basmati rice layered with spiced boiled eggs, caramelised onions, mint and aromatic spices.', 11.95, true, 4, '/images/egg_biryani.jpg');
 
 -- RICE & BREADS
 INSERT INTO menu_items (category_id, name, description, price, is_available, display_order, image_url) VALUES
