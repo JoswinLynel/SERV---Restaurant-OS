@@ -2,6 +2,7 @@ import { createClient } from "@/lib/supabase/server";
 import { notFound } from "next/navigation";
 import { MenuItemCard } from "@/components/customer/MenuItemCard";
 import { FloatingBasket } from "@/components/customer/FloatingBasket";
+import { CategoryNav } from "@/components/customer/CategoryNav";
 
 export default async function MenuPage({
   params,
@@ -83,23 +84,13 @@ export default async function MenuPage({
         </p>
       </header>
 
-      {/* Categories Nav */}
-      <nav className="px-6 py-4 overflow-x-auto whitespace-nowrap hide-scrollbar flex gap-8 border-b border-white/5 sticky top-[108px] z-10 bg-[var(--color-brand-bg-dark)]/90 backdrop-blur-md">
-        {categories.map((category: any, idx: number) => (
-          <a
-            key={category.id}
-            href={`#category-${category.id}`}
-            className={`text-[11px] uppercase tracking-[0.15em] font-medium transition-colors ${idx === 0 ? 'text-[var(--color-brand-gold)] border-b border-[var(--color-brand-gold)] pb-1' : 'text-[var(--color-brand-grey)] hover:text-[var(--color-brand-ivory)]'}`}
-          >
-            {category.name}
-          </a>
-        ))}
-      </nav>
+      {/* Categories Nav — client component with scrollspy */}
+      <CategoryNav categories={categories.map((c: any) => ({ id: c.id, name: c.name }))} />
 
       {/* Menu Content */}
       <main className="px-4 py-8 space-y-16 max-w-3xl mx-auto">
         {categories.map((category: any) => (
-          <section key={category.id} id={`category-${category.id}`}>
+          <section key={category.id} id={`category-${category.id}`} style={{ scrollMarginTop: '160px' }}>
             <h2 className="text-2xl font-serif mb-6 px-2 text-[var(--color-brand-ivory)] border-b border-white/5 pb-4">
               {category.name}
             </h2>
