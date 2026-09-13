@@ -96,7 +96,7 @@ INSERT INTO menu_items (category_id, name, description, price, is_available, dis
 
 -- DESSERTS
 INSERT INTO menu_items (category_id, name, description, price, is_available, display_order, image_url) VALUES
-('50000000-0000-0000-0000-000000000009', 'Gulab Jamun', 'Warm milk dumplings soaked in fragrant cardamom and rose syrup.', 5.50, true, 1, NULL),
+('50000000-0000-0000-0000-000000000009', 'Gulab Jamun', 'Warm milk dumplings soaked in fragrant cardamom and rose syrup.', 5.50, true, 1, '/images/gulab_jamun.jpg'),
 ('50000000-0000-0000-0000-000000000009', 'Paal Payasam', 'Traditional South Indian rice pudding slowly simmered with milk, cardamom and nuts.', 5.95, true, 2, NULL),
 ('50000000-0000-0000-0000-000000000009', 'Mango Kulfi', 'Creamy Indian-style frozen dessert infused with ripe mango.', 6.25, true, 3, NULL);
 
