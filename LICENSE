@@ -1,6 +1,6 @@
 MIT License
 
-Copyright (c) 2026 Junyu Chen
+Copyright (c) 2026 Joswin D'Souza
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -9,8 +9,34 @@ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 copies of the Software, and to permit persons to whom the Software is
 furnished to do so, subject to the following conditions:
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+TRADEMARK AND BRANDING NOTICE
+
+The Software is made available under the MIT License above. The name "SERVÉ",
+the SERVÉ logo, official product names, logos, visual identity, and other
+branding associated with the SERVÉ project are not licensed under this
+copyright licence.
+
+Use of the Software does not grant permission to use "SERVÉ" as the name of
+a fork, modified version, competing product, service, company, domain name,
+or other independent project in a manner that suggests that such project is
+the official SERVÉ project or is endorsed, maintained, certified, or sponsored
+by Joswin D'Souza.
+
+Users are free to fork, modify, redistribute, and commercially use the
+Software, but independent forks and derivative products must use a different
+name and their own branding unless separate written permission to use the
+SERVÉ Marks has been granted.
+
+Factual references are permitted, for example:
+
+"This project is based on SERVÉ."
+
+This trademark and branding notice does not restrict the rights granted by
+the MIT License to the Software itself. It is intended only to protect the
+SERVÉ name, trademarks, logos, and official branding.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
