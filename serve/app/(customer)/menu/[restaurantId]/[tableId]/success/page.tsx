@@ -9,7 +9,7 @@ import { useBasket } from "@/components/customer/BasketContext";
 
 export default function SuccessPage() {
   const searchParams = useSearchParams();
-  const orderId = searchParams.get("order");
+  const orderId = searchParams.get("orderId");
   const [order, setOrder] = useState<any>(null);
   const [showOrder, setShowOrder] = useState(false);
   const supabase = createClient();
