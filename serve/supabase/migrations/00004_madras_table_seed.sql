@@ -38,17 +38,17 @@ INSERT INTO categories (id, menu_id, name, display_order) VALUES
 -- STARTERS
 INSERT INTO menu_items (category_id, name, description, price, is_available, display_order, image_url) VALUES
 ('50000000-0000-0000-0000-000000000001', 'Chicken 65', 'Crispy, spiced chicken bites marinated with South Indian spices, curry leaves and fresh ginger.', 8.95, true, 1, '/images/chicken_65.png'),
-('50000000-0000-0000-0000-000000000001', 'Mutton Sukka', 'Tender pieces of mutton slow-cooked with roasted coconut, black pepper, fennel and aromatic South Indian spices.', 10.95, true, 2, NULL),
-('50000000-0000-0000-0000-000000000001', 'Chicken Pepper Fry', 'Succulent chicken tossed with cracked black pepper, onions, curry leaves and freshly ground spices.', 9.95, true, 3, NULL),
-('50000000-0000-0000-0000-000000000001', 'Nethili Fry', 'Crispy fried anchovies marinated with chilli, turmeric and South Indian spices.', 8.95, true, 4, NULL),
-('50000000-0000-0000-0000-000000000001', 'Madras Chicken Wings', 'Juicy chicken wings coated in a fiery Madras-style masala with curry leaves and roasted spices.', 9.50, true, 5, NULL);
+('50000000-0000-0000-0000-000000000001', 'Mutton Sukka', 'Tender pieces of mutton slow-cooked with roasted coconut, black pepper, fennel and aromatic South Indian spices.', 10.95, true, 2, '/images/mutton_sukka.png'),
+('50000000-0000-0000-0000-000000000001', 'Chicken Pepper Fry', 'Succulent chicken tossed with cracked black pepper, onions, curry leaves and freshly ground spices.', 9.95, true, 3, '/images/chicken_pepper_fry.png'),
+('50000000-0000-0000-0000-000000000001', 'Nethili Fry', 'Crispy fried anchovies marinated with chilli, turmeric and South Indian spices.', 8.95, true, 4, '/images/nethili_fry.png'),
+('50000000-0000-0000-0000-000000000001', 'Madras Chicken Wings', 'Juicy chicken wings coated in a fiery Madras-style masala with curry leaves and roasted spices.', 9.50, true, 5, '/images/madras_chicken_wings.png');
 
 -- DOSA
 INSERT INTO menu_items (category_id, name, description, price, is_available, display_order, image_url) VALUES
 ('50000000-0000-0000-0000-000000000002', 'Masala Dosa', 'A crisp golden dosa filled with spiced potato masala, served with sambar and coconut chutney.', 8.95, true, 1, '/images/masala_dosa.png'),
-('50000000-0000-0000-0000-000000000002', 'Chicken Masala Dosa', 'Crispy dosa filled with aromatic South Indian chicken masala, served with sambar and coconut chutney.', 11.95, true, 2, NULL),
-('50000000-0000-0000-0000-000000000002', 'Mutton Keema Dosa', 'Thin crispy dosa filled with fragrant minced mutton cooked with onion, chilli and traditional spices.', 12.95, true, 3, NULL),
-('50000000-0000-0000-0000-000000000002', 'Cheese Chilli Dosa', 'Crispy dosa filled with melted cheese, green chilli, onion and South Indian spices.', 9.95, true, 4, NULL),
+('50000000-0000-0000-0000-000000000002', 'Chicken Masala Dosa', 'Crispy dosa filled with aromatic South Indian chicken masala, served with sambar and coconut chutney.', 11.95, true, 2, '/images/chicken_masala_dosa.png'),
+('50000000-0000-0000-0000-000000000002', 'Mutton Keema Dosa', 'Thin crispy dosa filled with fragrant minced mutton cooked with onion, chilli and traditional spices.', 12.95, true, 3, '/images/mutton_keema_dosa.png'),
+('50000000-0000-0000-0000-000000000002', 'Cheese Chilli Dosa', 'Crispy dosa filled with melted cheese, green chilli, onion and South Indian spices.', 9.95, true, 4, '/images/cheese_chilli_dosa.png'),
 ('50000000-0000-0000-0000-000000000002', 'Ghee Roast Dosa', 'Extra-crisp dosa roasted with aromatic ghee and served with sambar and fresh coconut chutney.', 8.50, true, 5, NULL);
 
 -- CHICKEN
