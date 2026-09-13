@@ -142,13 +142,22 @@ export function DishModal({ isOpen, onClose, item, restaurantId }: { isOpen: boo
 
         {/* Footer */}
         <div className="p-6 border-t border-white/5 bg-[var(--color-brand-bg-dark)] shrink-0">
-          <button 
-            onClick={handleAddToOrder}
-            className="w-full bg-[var(--color-brand-gold)] text-[var(--color-brand-bg-dark)] py-4 rounded font-sans font-medium text-sm tracking-[0.1em] uppercase flex justify-between items-center px-6 hover:bg-[var(--color-brand-gold-light)] transition-colors shadow-[0_0_15px_rgba(201,164,92,0.1)]"
-          >
-            <span>Add to Order</span>
-            <span className="font-serif font-bold text-lg tracking-normal">£{total.toFixed(2)}</span>
-          </button>
+          {item.is_available ? (
+            <button 
+              onClick={handleAddToOrder}
+              className="w-full bg-[var(--color-brand-gold)] text-[var(--color-brand-bg-dark)] py-4 rounded font-sans font-medium text-sm tracking-[0.1em] uppercase flex justify-between items-center px-6 hover:bg-[var(--color-brand-gold-light)] transition-colors shadow-[0_0_15px_rgba(201,164,92,0.1)]"
+            >
+              <span>Add to Order</span>
+              <span className="font-serif font-bold text-lg tracking-normal">£{total.toFixed(2)}</span>
+            </button>
+          ) : (
+            <button 
+              disabled
+              className="w-full bg-red-900/30 text-red-500 py-4 rounded font-sans font-medium text-sm tracking-[0.1em] uppercase flex justify-center items-center px-6 cursor-not-allowed border border-red-500/20"
+            >
+              <span>Currently Unavailable</span>
+            </button>
+          )}
         </div>
       </div>
     </div>
