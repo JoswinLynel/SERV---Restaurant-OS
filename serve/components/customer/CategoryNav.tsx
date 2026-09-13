@@ -86,7 +86,7 @@ export function CategoryNav({ categories }: { categories: Category[] }) {
     <div className="sticky top-[108px] z-10 bg-[var(--color-brand-bg-dark)]/90 backdrop-blur-md border-b border-white/5">
       <nav
         ref={navRef}
-        className="max-w-6xl mx-auto w-full px-4 sm:px-8 lg:px-12 py-4 overflow-x-auto whitespace-nowrap hide-scrollbar flex gap-8"
+        className="max-w-6xl mx-auto w-full px-4 sm:px-8 lg:px-12 py-4 overflow-x-auto whitespace-nowrap hide-scrollbar flex lg:justify-center gap-8"
       >
         {categories.map((category) => {
           const isActive = activeId === category.id;
