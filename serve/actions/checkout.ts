@@ -1,17 +1,12 @@
 "use server";
 
 import Stripe from "stripe";
-import { createClient } from "@supabase/supabase-js";
+import { createClient } from "@/lib/supabase/server";
 import { headers } from "next/headers";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "sk_test_mock", {
   apiVersion: "2026-08-26.dahlia",
 });
-
-const supabaseAdmin = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY || "mock_key"
-);
 
 export async function createCheckoutSession(
   restaurantId: string,
@@ -27,15 +22,18 @@ export async function createCheckoutSession(
     throw new Error("Basket is empty");
   }
 
+  const supabase = await createClient();
+
   // 1. Verify table belongs to restaurant
-  const { data: table, error: tableError } = await supabaseAdmin
+  const { data: table, error: tableError } = await supabase
     .from("tables")
-    .select("id, code")
+    .select("id")
     .eq("id", tableId)
     .eq("restaurant_id", restaurantId)
     .single();
 
   if (tableError || !table) {
+    console.error("Table lookup failed:", { tableError, tableId, restaurantId, table });
     throw new Error("Invalid table or restaurant");
   }
 
@@ -45,7 +43,7 @@ export async function createCheckoutSession(
 
   for (const item of items) {
     // Verify menu item
-    const { data: menuItem, error: menuError } = await supabaseAdmin
+    const { data: menuItem, error: menuError } = await supabase
       .from("menu_items")
       .select("id, name, price, is_available")
       .eq("id", item.menu_item_id)
@@ -64,7 +62,7 @@ export async function createCheckoutSession(
 
     // Verify modifiers
     for (const mod of item.modifiers) {
-      const { data: modOption, error: modError } = await supabaseAdmin
+      const { data: modOption, error: modError } = await supabase
         .from("modifier_options")
         .select("id, name, price_adjustment")
         .eq("id", mod.id)
@@ -96,7 +94,7 @@ export async function createCheckoutSession(
   }
 
   // 3. Create Order
-  const { data: order, error: orderError } = await supabaseAdmin
+  const { data: order, error: orderError } = await supabase
     .from("orders")
     .insert({
       restaurant_id: restaurantId,
@@ -111,12 +109,13 @@ export async function createCheckoutSession(
     .single();
 
   if (orderError || !order) {
+    console.error("Order creation failed:", { orderError });
     throw new Error("Failed to create order");
   }
 
   // 4. Create Order Items
   for (const oi of orderItemsData) {
-    const { data: orderItem, error: oiError } = await supabaseAdmin
+    const { data: orderItem, error: oiError } = await supabase
       .from("order_items")
       .insert({
         order_id: order.id,
@@ -138,12 +137,12 @@ export async function createCheckoutSession(
         name: m.name,
         price_adjustment: m.price_adjustment,
       }));
-      await supabaseAdmin.from("order_item_modifiers").insert(modifiersToInsert);
+      await supabase.from("order_item_modifiers").insert(modifiersToInsert);
     }
   }
 
   // 5. Create Payment record in DB (pending)
-  const { data: payment, error: paymentError } = await supabaseAdmin
+  const { data: payment, error: paymentError } = await supabase
     .from("payments")
     .insert({
       order_id: order.id,
@@ -154,6 +153,7 @@ export async function createCheckoutSession(
     .single();
 
   if (paymentError || !payment) {
+    console.error("Payment creation failed:", { paymentError });
     throw new Error("Failed to create payment record");
   }
 
