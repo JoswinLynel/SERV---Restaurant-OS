@@ -83,28 +83,30 @@ export function CategoryNav({ categories }: { categories: Category[] }) {
   );
 
   return (
-    <nav
-      ref={navRef}
-      className="px-6 py-4 overflow-x-auto whitespace-nowrap hide-scrollbar flex gap-8 border-b border-white/5 sticky top-[108px] z-10 bg-[var(--color-brand-bg-dark)]/90 backdrop-blur-md"
-    >
-      {categories.map((category) => {
-        const isActive = activeId === category.id;
-        return (
-          <a
-            key={category.id}
-            ref={(el) => { linkRefs.current[category.id] = el; }}
-            href={`#category-${category.id}`}
-            onClick={(e) => handleClick(e, category.id)}
-            className={`text-[11px] uppercase tracking-[0.15em] font-medium transition-colors duration-200 pb-1 shrink-0 ${
-              isActive
-                ? "text-[var(--color-brand-gold)] border-b border-[var(--color-brand-gold)]"
-                : "text-[var(--color-brand-grey)] hover:text-[var(--color-brand-ivory)] border-b border-transparent"
-            }`}
-          >
-            {category.name}
-          </a>
-        );
-      })}
-    </nav>
+    <div className="sticky top-[108px] z-10 bg-[var(--color-brand-bg-dark)]/90 backdrop-blur-md border-b border-white/5">
+      <nav
+        ref={navRef}
+        className="max-w-6xl mx-auto w-full px-4 sm:px-8 lg:px-12 py-4 overflow-x-auto whitespace-nowrap hide-scrollbar flex gap-8"
+      >
+        {categories.map((category) => {
+          const isActive = activeId === category.id;
+          return (
+            <a
+              key={category.id}
+              ref={(el) => { linkRefs.current[category.id] = el; }}
+              href={`#category-${category.id}`}
+              onClick={(e) => handleClick(e, category.id)}
+              className={`text-[11px] uppercase tracking-[0.15em] font-medium transition-colors duration-200 pb-1 shrink-0 ${
+                isActive
+                  ? "text-[var(--color-brand-gold)] border-b border-[var(--color-brand-gold)]"
+                  : "text-[var(--color-brand-grey)] hover:text-[var(--color-brand-ivory)] border-b border-transparent"
+              }`}
+            >
+              {category.name}
+            </a>
+          );
+        })}
+      </nav>
+    </div>
   );
 }
