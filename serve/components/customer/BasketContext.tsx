@@ -31,13 +31,15 @@ interface BasketContextType {
 
 const BasketContext = createContext<BasketContextType | undefined>(undefined);
 
-export function BasketProvider({ children, restaurantId }: { children: React.ReactNode, restaurantId: string }) {
+export function BasketProvider({ children, restaurantId, tableId }: { children: React.ReactNode, restaurantId: string, tableId: string }) {
   const [items, setItems] = useState<BasketItem[]>([]);
   const [isLoaded, setIsLoaded] = useState(false);
 
+  const storageKey = `serve_basket_${restaurantId}_${tableId}`;
+
   // Load from local storage
   useEffect(() => {
-    const saved = localStorage.getItem(`serve_basket_${restaurantId}`);
+    const saved = localStorage.getItem(storageKey);
     if (saved) {
       try {
         setItems(JSON.parse(saved));
@@ -46,14 +48,14 @@ export function BasketProvider({ children, restaurantId }: { children: React.Rea
       }
     }
     setIsLoaded(true);
-  }, [restaurantId]);
+  }, [storageKey]);
 
   // Save to local storage
   useEffect(() => {
     if (isLoaded) {
-      localStorage.setItem(`serve_basket_${restaurantId}`, JSON.stringify(items));
+      localStorage.setItem(storageKey, JSON.stringify(items));
     }
-  }, [items, isLoaded, restaurantId]);
+  }, [items, isLoaded, storageKey]);
 
   const addItem = (item: Omit<BasketItem, "id">) => {
     const newItem: BasketItem = { ...item, id: Math.random().toString(36).substring(7) };

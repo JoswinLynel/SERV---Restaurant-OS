@@ -16,7 +16,7 @@ export function FloatingBasket() {
       <Link href={`${pathname}/basket`}>
         <button className="flex items-center gap-3 bg-[var(--color-brand-bg-elevated)] border border-white/10 text-[var(--color-brand-ivory)] px-6 py-3.5 rounded shadow-[0_0_30px_rgba(0,0,0,0.5)] hover:bg-white/5 transition-all cursor-pointer">
           <ShoppingBag className="w-4 h-4 text-[var(--color-brand-gold)]" />
-          <span className="font-sans font-medium tracking-[0.1em] uppercase text-xs">View Order</span>
+          <span className="font-sans font-medium tracking-[0.1em] uppercase text-xs">View Basket</span>
           <span className="bg-[var(--color-brand-gold)] text-[var(--color-brand-bg-dark)] text-xs font-bold px-2 py-0.5 rounded-sm ml-2">
             {itemCount}
           </span>

@@ -7,10 +7,10 @@ export default async function CustomerMenuLayout({
   children: React.ReactNode;
   params: Promise<{ restaurantId: string; tableId: string }>;
 }) {
-  const { restaurantId } = await params;
+  const { restaurantId, tableId } = await params;
 
   return (
-    <BasketProvider restaurantId={restaurantId}>
+    <BasketProvider restaurantId={restaurantId} tableId={tableId}>
       {children}
     </BasketProvider>
   );
