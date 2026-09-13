@@ -49,11 +49,11 @@ INSERT INTO menu_items (category_id, name, description, price, is_available, dis
 ('50000000-0000-0000-0000-000000000002', 'Chicken Masala Dosa', 'Crispy dosa filled with aromatic South Indian chicken masala, served with sambar and coconut chutney.', 11.95, true, 2, '/images/chicken_masala_dosa.png'),
 ('50000000-0000-0000-0000-000000000002', 'Mutton Keema Dosa', 'Thin crispy dosa filled with fragrant minced mutton cooked with onion, chilli and traditional spices.', 12.95, true, 3, '/images/mutton_keema_dosa.png'),
 ('50000000-0000-0000-0000-000000000002', 'Cheese Chilli Dosa', 'Crispy dosa filled with melted cheese, green chilli, onion and South Indian spices.', 9.95, true, 4, '/images/cheese_chilli_dosa.png'),
-('50000000-0000-0000-0000-000000000002', 'Ghee Roast Dosa', 'Extra-crisp dosa roasted with aromatic ghee and served with sambar and fresh coconut chutney.', 8.50, true, 5, NULL);
+('50000000-0000-0000-0000-000000000002', 'Ghee Roast Dosa', 'Extra-crisp dosa roasted with aromatic ghee and served with sambar and fresh coconut chutney.', 8.50, true, 5, '/images/ghee_roast_dosa.jpg');
 
 -- CHICKEN
 INSERT INTO menu_items (category_id, name, description, price, is_available, display_order, image_url) VALUES
-('50000000-0000-0000-0000-000000000003', 'Chettinad Chicken', 'Tender chicken cooked in a rich Chettinad masala with roasted coconut, fennel, pepper and aromatic spices.', 13.95, true, 1, NULL),
+('50000000-0000-0000-0000-000000000003', 'Chettinad Chicken', 'Tender chicken cooked in a rich Chettinad masala with roasted coconut, fennel, pepper and aromatic spices.', 13.95, true, 1, '/images/chettinad_chicken_curry.jpg'),
 ('50000000-0000-0000-0000-000000000003', 'Butter Chicken', 'Tandoori-style chicken simmered in a silky tomato and butter sauce with gentle spices.', 14.50, true, 2, '/images/butter_chicken.png'),
 ('50000000-0000-0000-0000-000000000003', 'Madras Chicken Curry', 'Chicken cooked in a bold South Indian curry with tomato, onion, chilli and fresh curry leaves.', 13.50, true, 3, NULL),
 ('50000000-0000-0000-0000-000000000003', 'Karaikudi Chicken', 'A fiery regional chicken curry made with roasted spices, coconut and Karaikudi-style masala.', 14.25, true, 4, NULL),
