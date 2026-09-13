@@ -14,6 +14,7 @@ export interface BasketItem {
   name: string;
   price: number;
   quantity: number;
+  image_url?: string;
   modifiers: BasketItemModifier[];
   notes?: string;
 }

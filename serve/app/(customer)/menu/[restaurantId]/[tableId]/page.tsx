@@ -88,13 +88,13 @@ export default async function MenuPage({
       <CategoryNav categories={categories.map((c: any) => ({ id: c.id, name: c.name }))} />
 
       {/* Menu Content */}
-      <main className="px-4 py-8 space-y-16 max-w-3xl mx-auto">
+      <main className="px-4 sm:px-8 lg:px-12 py-8 space-y-16 max-w-6xl mx-auto w-full">
         {categories.map((category: any) => (
           <section key={category.id} id={`category-${category.id}`} style={{ scrollMarginTop: '160px' }}>
             <h2 className="text-2xl font-serif mb-6 px-2 text-[var(--color-brand-ivory)] border-b border-white/5 pb-4">
               {category.name}
             </h2>
-            <div className="flex flex-col space-y-1">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-1">
               {category.menu_items.map((item: any) => (
                 <MenuItemCard key={item.id} item={item} restaurantId={restaurantId} />
               ))}

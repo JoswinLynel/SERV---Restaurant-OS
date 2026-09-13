@@ -1,14 +1,16 @@
 "use client";
 
 import { useBasket } from "@/components/customer/BasketContext";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Plus, Minus, Trash2 } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter, usePathname, useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 
 export default function BasketPage() {
-  const { items, total, itemCount, clearBasket } = useBasket();
+  const { items, total, itemCount, updateQuantity, removeItem, clearBasket } =
+    useBasket();
   const router = useRouter();
   const pathname = usePathname();
   const params = useParams();
@@ -39,7 +41,6 @@ export default function BasketPage() {
     setIsSubmitting(true);
 
     try {
-      // 1. Create order
       const { data: order, error: orderError } = await supabase
         .from("orders")
         .insert({
@@ -56,7 +57,6 @@ export default function BasketPage() {
 
       if (orderError) throw orderError;
 
-      // 2. Insert order items
       for (const item of items) {
         const modifierTotal = item.modifiers.reduce(
           (acc, m) => acc + Number(m.price_adjustment),
@@ -79,7 +79,6 @@ export default function BasketPage() {
 
         if (oiError) throw oiError;
 
-        // 3. Insert modifiers
         if (item.modifiers.length > 0) {
           const modifiersToInsert = item.modifiers.map((m) => ({
             order_item_id: orderItem.id,
@@ -120,19 +119,13 @@ export default function BasketPage() {
 
   return (
     <div className="min-h-screen bg-[var(--color-brand-bg-dark)] text-[var(--color-brand-ivory)] flex flex-col font-sans">
-      {/* Header */}
-      <header className="sticky top-0 z-10 bg-[var(--color-brand-bg-dark)]/90 backdrop-blur-md px-6 py-6 flex items-center justify-between border-b border-white/5">
+      {/* Header — back arrow only, no Edit button */}
+      <header className="sticky top-0 z-10 bg-[var(--color-brand-bg-dark)]/90 backdrop-blur-md px-6 py-6 flex items-center border-b border-white/5">
         <Link
           href={backUrl}
           className="text-[var(--color-brand-grey)] hover:text-[var(--color-brand-ivory)] transition-colors"
         >
           <ArrowLeft className="w-5 h-5" />
-        </Link>
-        <Link
-          href={backUrl}
-          className="text-[var(--color-brand-gold)] text-xs uppercase tracking-widest font-medium hover:text-[var(--color-brand-gold-light)] transition-colors"
-        >
-          Edit
         </Link>
       </header>
 
@@ -161,30 +154,68 @@ export default function BasketPage() {
                 key={item.id}
                 className="flex gap-4 border-b border-white/5 pb-6"
               >
-                <div className="w-16 h-16 bg-[var(--color-brand-bg-elevated)] rounded shrink-0 flex items-center justify-center">
-                  <span className="text-[var(--color-brand-grey)]/30 font-serif italic text-[10px]">
-                    SERVÉ
-                  </span>
-                </div>
-                <div className="flex-1 flex flex-col justify-center">
-                  <div className="flex justify-between items-start">
-                    <h3 className="font-serif text-[var(--color-brand-ivory)] text-lg leading-tight">
-                      {item.name}
-                    </h3>
-                    <div className="flex items-center gap-6">
-                      <span className="text-[var(--color-brand-grey)] text-sm">
-                        {item.quantity}
-                      </span>
-                      <span className="font-sans font-medium text-sm">
-                        £{(itemPrice * item.quantity).toFixed(2)}
+                {/* Dish Image */}
+                <div className="relative w-16 h-16 bg-[var(--color-brand-bg-elevated)] rounded shrink-0 overflow-hidden">
+                  {item.image_url ? (
+                    <Image
+                      src={item.image_url}
+                      alt={item.name}
+                      fill
+                      className="object-cover"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center">
+                      <span className="text-[var(--color-brand-grey)]/30 font-serif italic text-[10px]">
+                        SERVÉ
                       </span>
                     </div>
-                  </div>
+                  )}
+                </div>
+
+                {/* Item Details */}
+                <div className="flex-1 flex flex-col justify-center min-w-0">
+                  <h3 className="font-serif text-[var(--color-brand-ivory)] text-base leading-tight truncate">
+                    {item.name}
+                  </h3>
                   {item.modifiers.length > 0 && (
-                    <div className="text-xs text-[var(--color-brand-grey)] mt-1">
+                    <div className="text-xs text-[var(--color-brand-grey)] mt-0.5 truncate">
                       {item.modifiers.map((m) => m.name).join(", ")}
                     </div>
                   )}
+                  <div className="text-sm font-medium text-[var(--color-brand-ivory)] mt-1">
+                    £{(itemPrice * item.quantity).toFixed(2)}
+                  </div>
+                </div>
+
+                {/* Quantity Controls */}
+                <div className="flex items-center gap-2 shrink-0">
+                  <button
+                    onClick={() => {
+                      if (item.quantity <= 1) {
+                        removeItem(item.id);
+                      } else {
+                        updateQuantity(item.id, item.quantity - 1);
+                      }
+                    }}
+                    className="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-[var(--color-brand-grey)] hover:text-[var(--color-brand-ivory)] hover:border-white/20 transition-colors cursor-pointer"
+                  >
+                    {item.quantity <= 1 ? (
+                      <Trash2 className="w-3.5 h-3.5 text-[var(--color-status-red)]" />
+                    ) : (
+                      <Minus className="w-3.5 h-3.5" />
+                    )}
+                  </button>
+                  <span className="text-sm font-medium min-w-[1.5rem] text-center">
+                    {item.quantity}
+                  </span>
+                  <button
+                    onClick={() =>
+                      updateQuantity(item.id, item.quantity + 1)
+                    }
+                    className="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-[var(--color-brand-grey)] hover:text-[var(--color-brand-ivory)] hover:border-white/20 transition-colors cursor-pointer"
+                  >
+                    <Plus className="w-3.5 h-3.5" />
+                  </button>
                 </div>
               </div>
             );
@@ -202,7 +233,6 @@ export default function BasketPage() {
         {/* Payment Section */}
         <div className="space-y-3 pt-6 border-t border-white/5">
           {!showPaymentOptions ? (
-            /* Step 1: Proceed to Pay */
             <button
               onClick={() => setShowPaymentOptions(true)}
               className="w-full bg-[var(--color-brand-gold)] text-[var(--color-brand-bg-dark)] py-4 rounded font-sans font-medium text-sm tracking-[0.1em] uppercase shadow-[0_0_15px_rgba(201,164,92,0.1)] hover:bg-[var(--color-brand-gold-light)] transition-colors cursor-pointer"
@@ -210,13 +240,11 @@ export default function BasketPage() {
               Proceed to Pay
             </button>
           ) : (
-            /* Step 2: Payment method options */
             <div className="space-y-3 animate-in fade-in slide-in-from-bottom-4 duration-300">
               <p className="text-xs uppercase tracking-widest text-[var(--color-brand-grey)] text-center mb-4">
                 Choose payment method
               </p>
 
-              {/* Apple Pay */}
               <button
                 onClick={() => submitOrder("apple_pay")}
                 disabled={isSubmitting}
@@ -232,7 +260,6 @@ export default function BasketPage() {
                 Pay with <span className="font-bold">Apple Pay</span>
               </button>
 
-              {/* Pay by Card */}
               <button
                 onClick={() => submitOrder("card")}
                 disabled={isSubmitting}
@@ -254,7 +281,6 @@ export default function BasketPage() {
                 Pay with <span className="font-bold">Card</span>
               </button>
 
-              {/* Cancel — go back to Proceed to Pay */}
               <button
                 onClick={() => setShowPaymentOptions(false)}
                 className="w-full text-[var(--color-brand-grey)] py-3 font-sans text-xs uppercase tracking-widest hover:text-[var(--color-brand-ivory)] transition-colors cursor-pointer"

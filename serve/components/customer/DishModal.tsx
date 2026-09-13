@@ -54,6 +54,7 @@ export function DishModal({ isOpen, onClose, item, restaurantId }: { isOpen: boo
       name: item.name,
       price: item.price,
       quantity,
+      image_url: item.image_url,
       modifiers: selectedModOptions,
       notes: ""
     });
