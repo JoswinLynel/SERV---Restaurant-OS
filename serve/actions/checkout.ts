@@ -30,7 +30,7 @@ export async function createCheckoutSession(
   // 1. Verify table belongs to restaurant
   const { data: table, error: tableError } = await supabaseAdmin
     .from("tables")
-    .select("id, table_code")
+    .select("id, code")
     .eq("id", tableId)
     .eq("restaurant_id", restaurantId)
     .single();
@@ -175,8 +175,8 @@ export async function createCheckoutSession(
       quantity: oi.quantity,
     })),
     mode: "payment",
-    success_url: `${origin}/t/${table.table_code}/success?orderId=${order.id}`,
-    cancel_url: `${origin}/t/${table.table_code}`,
+    success_url: `${origin}/menu/${restaurantId}/${tableId}/success?orderId=${order.id}`,
+    cancel_url: `${origin}/menu/${restaurantId}/${tableId}`,
     metadata: {
       orderId: order.id,
       tableId: tableId,
