@@ -70,7 +70,7 @@ INSERT INTO menu_items (category_id, name, description, price, is_available, dis
 INSERT INTO menu_items (category_id, name, description, price, is_available, display_order, image_url) VALUES
 ('50000000-0000-0000-0000-000000000005', 'Kerala Fish Curry', 'Fresh fish simmered in a tangy Kerala-style coconut and tamarind curry with curry leaves.', 14.95, true, 1, '/images/kerala_fish_curry.png'),
 ('50000000-0000-0000-0000-000000000005', 'Chilli Garlic Prawns', 'King prawns tossed with garlic, chilli, curry leaves and a fragrant South Indian spice blend.', 15.95, true, 2, '/images/chilli_garlic_prawns.png'),
-('50000000-0000-0000-0000-000000000005', 'Malabar Fish Fry', 'Fish fillet marinated with turmeric, chilli and coastal spices, then shallow-fried until crisp.', 13.95, true, 3, NULL),
+('50000000-0000-0000-0000-000000000005', 'Malabar Fish Fry', 'Fish fillet marinated with turmeric, chilli and coastal spices, then shallow-fried until crisp.', 13.95, true, 3, '/images/malabar_fish_fry.png'),
 ('50000000-0000-0000-0000-000000000005', 'Prawn Masala', 'Succulent prawns cooked with onion, tomato, green chilli and aromatic South Indian masala.', 15.50, true, 4, NULL);
 
 -- BIRYANI
