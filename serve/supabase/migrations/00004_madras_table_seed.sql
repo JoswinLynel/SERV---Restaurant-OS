@@ -97,12 +97,12 @@ INSERT INTO menu_items (category_id, name, description, price, is_available, dis
 -- DESSERTS
 INSERT INTO menu_items (category_id, name, description, price, is_available, display_order, image_url) VALUES
 ('50000000-0000-0000-0000-000000000009', 'Gulab Jamun', 'Warm milk dumplings soaked in fragrant cardamom and rose syrup.', 5.50, true, 1, '/images/gulab_jamun.jpg'),
-('50000000-0000-0000-0000-000000000009', 'Paal Payasam', 'Traditional South Indian rice pudding slowly simmered with milk, cardamom and nuts.', 5.95, true, 2, NULL),
-('50000000-0000-0000-0000-000000000009', 'Mango Kulfi', 'Creamy Indian-style frozen dessert infused with ripe mango.', 6.25, true, 3, NULL);
+('50000000-0000-0000-0000-000000000009', 'Paal Payasam', 'Traditional South Indian rice pudding slowly simmered with milk, cardamom and nuts.', 5.95, true, 2, '/images/paal_payasam.jpg'),
+('50000000-0000-0000-0000-000000000009', 'Mango Kulfi', 'Creamy Indian-style frozen dessert infused with ripe mango.', 6.25, true, 3, '/images/mango_kulfi.jpg');
 
 -- DRINKS
 INSERT INTO menu_items (category_id, name, description, price, is_available, display_order, image_url) VALUES
 ('50000000-0000-0000-0000-000000000010', 'Mango Lassi', 'Creamy yoghurt drink blended with ripe mango.', 4.50, true, 1, '/images/mango_lassi.png'),
-('50000000-0000-0000-0000-000000000010', 'Sweet Lassi', 'Chilled yoghurt drink lightly sweetened and finished with cardamom.', 4.25, true, 2, NULL),
-('50000000-0000-0000-0000-000000000010', 'Masala Chai', 'Traditional Indian tea brewed with milk and aromatic spices.', 3.50, true, 3, NULL),
-('50000000-0000-0000-0000-000000000010', 'South Indian Filter Coffee', 'Strong, aromatic filter coffee blended with hot milk and a touch of sweetness.', 3.95, true, 4, NULL);
+('50000000-0000-0000-0000-000000000010', 'Sweet Lassi', 'Chilled yoghurt drink lightly sweetened and finished with cardamom.', 4.25, true, 2, '/images/sweet_lassi.jpg'),
+('50000000-0000-0000-0000-000000000010', 'Masala Chai', 'Traditional Indian tea brewed with milk and aromatic spices.', 3.50, true, 3, '/images/masala_chai.jpg'),
+('50000000-0000-0000-0000-000000000010', 'South Indian Filter Coffee', 'Strong, aromatic filter coffee blended with hot milk and a touch of sweetness.', 3.95, true, 4, '/images/filter_coffee.png');
