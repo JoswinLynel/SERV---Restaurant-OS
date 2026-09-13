@@ -1,151 +1,673 @@
-# 🍽️ SERVÉ — Restaurant OS
+# SERVÉ
 
-<p align="center">
-  <img src="docs/landing.png" alt="SERVÉ Banner" width="100%" style="border-radius: 12px;" />
-</p>
+### The smarter way to dine.
 
-<p align="center">
-  <b>A modern, full-stack QR ordering & Point-of-Sale (POS) SaaS platform for restaurants.</b><br />
-  Diners scan table QR codes to order directly from their browser — no app installation required. Orders stream live to the kitchen dashboard in real time.
-</p>
+SERVÉ is a premium restaurant ordering, POS, kitchen, and management platform designed to modernise the entire dining experience.
 
-<p align="center">
-  <img alt="Next.js" src="https://img.shields.io/badge/Next.js-16%20App%20Router-black?logo=next.js">
-  <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-5.0-3178c6?logo=typescript&logoColor=white">
-  <img alt="Supabase" src="https://img.shields.io/badge/Supabase-Postgres%20%2B%20Realtime-3ecf8e?logo=supabase&logoColor=white">
-  <img alt="Tailwind CSS" src="https://img.shields.io/badge/Tailwind-v4-38bdf8?logo=tailwindcss&logoColor=white">
-  <img alt="License" src="https://img.shields.io/badge/License-MIT-green">
-</p>
+The goal is simple: make ordering easier for guests, operations easier for staff, and restaurants more profitable.
 
 ---
 
-## 📸 Screenshots & Showcase
+## ✦ Vision
 
-| 📱 Mobile Diner Menu | 💻 Live Kitchen Dashboard | 💳 POS Counter Checkout |
-| :---: | :---: | :---: |
-| ![Customer menu](docs/customer-menu.png) | ![Live orders](docs/live-orders.png) | ![Checkout](docs/checkout.png) |
+SERVÉ brings the complete restaurant experience into one connected platform:
 
----
+**Guest → QR Menu → Order → Payment → Kitchen → POS → Service → Analytics**
 
-## ✨ Key Features
+Customers can scan a table QR code, browse the restaurant's menu, customise items, place an order, pay securely, and follow the status of their order.
 
-### 📱 Customer Experience (Dine-In)
-- **Zero-Friction QR Ordering**: Diners scan a table QR code and view the menu immediately inside any mobile browser. No app download required.
-- **Categorized Menu & Special Requests**: Browse dishes by category with crisp photos, pricing, and add custom item notes (e.g. *"No onions, extra sauce"*).
-- **Cart & Order Tracking**: Instant item total calculations and smooth order submission straight to the kitchen.
-
-### 💻 Kitchen & Staff Dashboard
-- **Real-Time Order Push**: New orders arrive instantaneously without manual page refreshes, powered by Supabase Realtime (Postgres logical replication).
-- **Audible Alerts**: Configurable chime/beep notification triggers when a new order arrives.
-- **Dine-In & Takeaway Management**: Separate or view unified queues. Auto-generates takeaway tickets (`T01`, `T02`...) for walk-in takeaway orders.
-- **Table Bill Merging**: Group multiple orders placed on the same physical table into a consolidated bill for checkout.
-
-### 🧾 POS & Counter Operations
-- **Multi-Method Payment Support**: Process Cash, Card, or Direct Transfer transactions.
-- **Automated Surcharges**: Configurable card surcharge percentages and one-click Public Holiday (PH) surcharge toggles.
-- **Smart Change Calculator**: Instant change calculations with quick-cash bill buttons ($20, $50, $100).
-- **Payment Reversals (Undo)**: Accidental payment checkout can be reverted back to *Confirmed* status in one click.
-- **Daily Revenue Analytics**: Real-time sales breakdown of today's total revenue split by payment method and collected surcharges.
-
-### 🪑 Operations & Admin Tools
-- **Menu Builder**: Full CRUD for menu items and categories. Set price, description, category assignment, and upload images to cloud storage.
-- **Stock Availability Toggles**: Toggle items as *Available* or *Unavailable* in real time to prevent diners from ordering sold-out dishes.
-- **Printable QR Code Card Generator**: Built-in client-side HTML5 Canvas generator produces high-resolution table card graphics (`Table 1`, `Table 2`...) ready for printing and placement on physical tables.
+Restaurant teams receive orders in real time through the kitchen and POS interfaces while management gains visibility through a central dashboard.
 
 ---
 
-## 🏗️ System Architecture
+## ✦ Core Features
 
-```mermaid
-flowchart LR
-    subgraph Client["📱 Customer Device"]
-        M["Public Menu Route<br/>/menu/:restaurantId/:tableNumber"]
-    end
-    subgraph Staff["💻 Staff Dashboard"]
-        D["Kitchen KDS & POS<br/>/dashboard/orders"]
-    end
-    subgraph NextServer["▲ Next.js 16 (App Router)"]
-        SSR["RSC & Route Handlers"]
-    end
-    subgraph Cloud["🟢 Supabase Cloud"]
-        DB[("Postgres Database<br/>+ Scoped RLS Policies")]
-        RT["Realtime Engine<br/>(Logical Replication)"]
-        ST["Storage Bucket<br/>(menu-images)"]
-        AU["Auth"]
-    end
+### Customer Ordering
 
-    M -->|"Anonymous INSERT (RLS)"| DB
-    D -->|"Owner CRUD (RLS)"| DB
-    D <-->|"Session Auth"| AU
-    DB -->|"Postgres Row Change"| RT
-    RT -->|"Live Order Event Push (~1s)"| D
-    M -->|"Fetch Public Media"| ST
-    M & D --- SSR
+- Table QR-code ordering
+- Mobile-first menu
+- Categories and menu sections
+- Food and drink descriptions
+- Images and pricing
+- Item customisation
+- Add-ons and modifiers
+- Special requests
+- Order notes
+- Cart management
+- Order status tracking
+- Dine-in ordering
+- Takeaway ordering
+
+### Payments
+
+- Secure online payments
+- Stripe integration
+- Card payments
+- Apple Pay
+- Google Pay
+- Payment status tracking
+- Automatic payment/order reconciliation
+
+### Kitchen Display
+
+- Real-time incoming orders
+- Order queue
+- Preparation status
+- Item-level status
+- Priority indicators
+- Ready-for-service workflow
+- Completed order history
+
+### POS
+
+- Restaurant order management
+- Cash payments
+- Card payments
+- Order lookup
+- Table orders
+- Takeaway orders
+- Refund workflows
+- Payment reconciliation
+- Staff access controls
+
+### Table Management
+
+- Restaurant floor plan
+- Table numbers
+- Table status
+- QR codes per table
+- Occupancy tracking
+- Active orders by table
+- Table session management
+
+### Menu Management
+
+- Categories
+- Menu items
+- Prices
+- Images
+- Modifiers
+- Availability
+- Dietary information
+- Item descriptions
+- Menu publishing controls
+
+### Restaurant Dashboard
+
+- Revenue overview
+- Orders
+- Average order value
+- Popular menu items
+- Sales trends
+- Payment information
+- Operational insights
+- Restaurant configuration
+
+### Staff Management
+
+- Staff accounts
+- Role-based permissions
+- Admin access
+- Manager access
+- Kitchen access
+- POS access
+- Secure authentication
+
+### Multi-Location Support
+
+Designed to support restaurant groups operating multiple venues from one platform.
+
+- Multiple restaurants
+- Location-specific menus
+- Location-specific staff
+- Location-specific tables
+- Location-specific orders
+- Centralised management
+
+### Customer Experience
+
+Future-ready customer functionality can include:
+
+- Customer profiles
+- Order history
+- Loyalty
+- Rewards
+- Promotions
+- Personalised recommendations
+- Customer communication
+
+---
+
+# ✦ Technology
+
+SERVÉ is designed as a modern full-stack SaaS application.
+
+### Frontend
+
+- Next.js
+- React
+- TypeScript
+- Tailwind CSS
+- Responsive design
+
+### Backend
+
+- Next.js server architecture
+- Supabase
+- PostgreSQL
+- Supabase Auth
+- Supabase Storage
+- Supabase Realtime
+
+### Payments
+
+- Stripe
+
+### Infrastructure
+
+- Vercel-compatible deployment
+- Cloud-hosted PostgreSQL
+- Realtime event infrastructure
+- Secure environment configuration
+
+---
+
+# ✦ Architecture
+
+SERVÉ uses a multi-tenant SaaS architecture.
+
+A simplified flow:
+
+```text
+Customer
+   │
+   ▼
+QR Code
+   │
+   ▼
+SERVÉ Customer App
+   │
+   ├── Menu
+   ├── Cart
+   ├── Order
+   └── Payment
+          │
+          ▼
+      Order System
+       │       │
+       ▼       ▼
+    Kitchen    POS
+       │       │
+       └───┬───┘
+           ▼
+       Restaurant
+        Dashboard
 ```
 
----
-
-## 🗂️ Database Schema Overview
-
-```
-restaurants ──┬──< categories ──< menu_items
-              ├──< tables
-              └──< orders ──< order_items
-```
-
-- `restaurants`: Stores restaurant details, owner link, card surcharge %, public holiday surcharge %, and active toggles.
-- `categories`: Menu categories sorted by custom display order.
-- `menu_items`: Dish names, descriptions, prices, image URLs, category links, and availability status.
-- `tables`: Physical table numbers associated with a restaurant.
-- `orders`: Tracks table numbers or takeaway identifiers (`T01`), status (`pending`, `confirmed`, `ready`, `paid`), totals, surcharges, payment methods, and timestamps.
-- `order_items`: Line items linked to orders capturing snapshots of item names, prices, and quantities at order time.
+The system is designed so that an order can move through the restaurant workflow in real time without requiring staff to manually re-enter information.
 
 ---
 
-## 🚀 Getting Started
+# ✦ Data Architecture
 
-### 1. Prerequisites
-- **Node.js**: v18.x or higher
-- **npm**: v9.x or higher
-- **Supabase Account**: A free Supabase project at [supabase.com](https://supabase.com)
+The platform is intended to use a relational PostgreSQL data model.
 
-### 2. Installation & Setup
+Core entities include:
+
+```text
+Organisation
+Restaurant
+Location
+User
+Staff
+Role
+Permission
+Table
+QR Code
+Menu
+Menu Category
+Menu Item
+Modifier
+Order
+Order Item
+Payment
+Kitchen Ticket
+Customer
+Customer Address
+Loyalty Account
+Promotion
+Audit Log
+```
+
+The exact production schema should evolve during implementation based on the application's requirements.
+
+---
+
+# ✦ Security
+
+Security is a core requirement of SERVÉ.
+
+The application should implement:
+
+- Secure authentication
+- Role-based access control
+- Tenant isolation
+- Server-side authorisation
+- Protected API routes
+- Input validation
+- Secure payment processing
+- Environment-variable secrets
+- Database access policies
+- Audit logging for sensitive actions
+- Protection against common web vulnerabilities
+- GDPR-conscious data handling
+
+SERVÉ should never store raw card details. Payment information should be handled through the payment provider.
+
+---
+
+# ✦ Independent Product & Intellectual Property
+
+SERVÉ is intended to be an independently developed commercial software product.
+
+The implementation, branding, visual identity, user interface, database design, documentation, and original assets should be created independently for SERVÉ.
+
+SERVÉ may be informed by general restaurant-industry workflows and publicly available concepts, but it should not copy another project's:
+
+- Source code
+- UI implementation
+- Database schema
+- Branding
+- Logos
+- Text
+- Images
+- Proprietary assets
+- Project-specific architecture
+
+Third-party libraries and dependencies remain subject to their respective licences.
+
+---
+
+# ✦ Licence
+
+SERVÉ is an independent commercial software project.
+
+**Copyright © 2026 SERVÉ. All rights reserved.**
+
+Unless explicitly stated otherwise, the SERVÉ source code, branding, designs, documentation, and original assets are proprietary and may not be copied, modified, distributed, sublicensed, or commercially exploited without written permission.
+
+Third-party libraries and dependencies remain subject to their respective licences.
+
+> Note: The final legal ownership and licence wording should be reviewed by appropriate legal counsel before commercial distribution.
+
+---
+
+# ✦ Development Setup
+
+## Requirements
+
+Install:
+
+- Node.js
+- npm
+- Git
+- A Supabase project
+- A Stripe account for payment testing
+
+---
+
+## Environment Variables
+
+Create a local environment file:
 
 ```bash
-# Clone the repository
-git clone https://github.com/JoswinLynel/SERV---Restaurant-OS.git
-cd SERV---Restaurant-OS
+.env.local
+```
 
-# Install dependencies
+Example:
+
+```env
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
+
+STRIPE_SECRET_KEY=
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=
+STRIPE_WEBHOOK_SECRET=
+```
+
+Never commit production secrets to source control.
+
+---
+
+# ✦ Local Development
+
+Install dependencies:
+
+```bash
 npm install
 ```
 
-### 3. Environment Configuration
-
-Create a `.env.local` file in the project root:
-
-```env
-NEXT_PUBLIC_SUPABASE_URL=https://your-project-ref.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-public-key
-```
-
-### 4. Database Initialization
-
-1. Open your Supabase Project SQL Editor.
-2. Run the complete schema script: [`supabase-schema.sql`](supabase-schema.sql)
-3. *(Optional)* Run the demo seed dataset script: [`seed-demo.sql`](seed-demo.sql)
-4. Ensure a public Storage bucket named `menu-images` is created in Supabase.
-
-### 5. Run Locally
+Start the development server:
 
 ```bash
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) in your browser.
+The application should then be available at:
+
+```text
+http://localhost:3000
+```
 
 ---
 
-## 📄 License
+# ✦ Production Build
 
-Distributed under the MIT License. See [`LICENSE`](LICENSE) for more information.
+Run:
+
+```bash
+npm run build
+```
+
+Then:
+
+```bash
+npm start
+```
+
+Before deployment, production configuration, database policies, payment webhooks, authentication, and environment variables should be verified.
+
+---
+
+# ✦ Design Philosophy
+
+SERVÉ is designed around **premium hospitality rather than generic restaurant software**.
+
+The visual direction should feel like:
+
+> **Michelin-star hospitality meets Apple-level product design.**
+
+### Visual Principles
+
+- Dark luxury aesthetic
+- Near-black and charcoal surfaces
+- Warm ivory typography
+- Restrained champagne/gold accents
+- Elegant serif display typography
+- Clean modern sans-serif interface typography
+- High-quality food photography
+- Generous whitespace
+- Minimal visual clutter
+- Subtle borders
+- Refined shadows
+- Limited use of rounded containers
+- Smooth, purposeful animation
+
+The interface should feel sophisticated, calm, premium, and trustworthy.
+
+Avoid:
+
+- Generic SaaS dashboards
+- Excessive gradients
+- Excessive rounded cards
+- Visual clutter
+- Cheap-looking colours
+- Overly playful restaurant UI
+- Unnecessary animations
+
+---
+
+# ✦ Product Experience
+
+SERVÉ should feel consistent across three primary experiences.
+
+## Guest
+
+Fast, elegant, mobile-first.
+
+The customer should be able to:
+
+```text
+Scan
+  ↓
+Browse
+  ↓
+Choose
+  ↓
+Customise
+  ↓
+Order
+  ↓
+Pay
+  ↓
+Track
+```
+
+## Restaurant Staff
+
+Fast, clear, operational.
+
+Staff should immediately understand:
+
+- What has been ordered
+- Which table ordered it
+- What needs preparing
+- What is ready
+- What has been paid
+- What needs attention
+
+## Management
+
+Insight-driven.
+
+Managers should be able to understand:
+
+- Sales
+- Orders
+- Customers
+- Menu performance
+- Restaurant performance
+- Staff activity
+- Operational trends
+
+---
+
+# ✦ SaaS Model
+
+SERVÉ is intended to operate as a restaurant SaaS platform.
+
+A potential commercial model may include:
+
+- Initial setup fee
+- Monthly subscription
+- Optional transaction/platform fee
+- Optional hardware
+- Premium features
+- Multi-location plans
+
+Final pricing should be determined after validating the product with restaurants and understanding the operating costs.
+
+---
+
+# ✦ Roadmap
+
+## Phase 1 — Foundation
+
+- [ ] Project architecture
+- [ ] Authentication
+- [ ] Multi-tenant database
+- [ ] Restaurant onboarding
+- [ ] User roles
+- [ ] Core UI system
+- [ ] Design system
+
+## Phase 2 — Restaurant Setup
+
+- [ ] Restaurant profile
+- [ ] Locations
+- [ ] Tables
+- [ ] QR generation
+- [ ] Menu management
+- [ ] Categories
+- [ ] Modifiers
+- [ ] Item availability
+
+## Phase 3 — Customer Ordering
+
+- [ ] QR entry
+- [ ] Mobile menu
+- [ ] Cart
+- [ ] Modifiers
+- [ ] Order placement
+- [ ] Order status
+- [ ] Customer account
+
+## Phase 4 — Payments
+
+- [ ] Stripe integration
+- [ ] Card payments
+- [ ] Apple Pay
+- [ ] Google Pay
+- [ ] Payment confirmation
+- [ ] Webhooks
+- [ ] Refund workflow
+
+## Phase 5 — Kitchen
+
+- [ ] Kitchen display
+- [ ] Realtime orders
+- [ ] Order status
+- [ ] Preparation workflow
+- [ ] Ready notifications
+
+## Phase 6 — POS
+
+- [ ] POS interface
+- [ ] Table orders
+- [ ] Takeaway orders
+- [ ] Cash payments
+- [ ] Card payments
+- [ ] Order history
+- [ ] Refunds
+
+## Phase 7 — Management
+
+- [ ] Dashboard
+- [ ] Sales analytics
+- [ ] Menu analytics
+- [ ] Customer analytics
+- [ ] Staff management
+- [ ] Audit logs
+
+## Phase 8 — Growth
+
+- [ ] Loyalty
+- [ ] Promotions
+- [ ] Customer profiles
+- [ ] Multi-location management
+- [ ] Advanced reporting
+- [ ] AI-powered insights
+
+---
+
+# ✦ Future AI Features
+
+SERVÉ can eventually incorporate AI to help restaurants make better operational decisions.
+
+Potential capabilities include:
+
+### AI Menu Insights
+
+Identify:
+
+- Best-selling dishes
+- Underperforming dishes
+- Menu trends
+- Potential pricing opportunities
+
+### AI Demand Forecasting
+
+Predict:
+
+- Busy periods
+- Expected order volume
+- Popular items
+- Staffing requirements
+
+### AI Recommendations
+
+Suggest:
+
+- Menu combinations
+- Upsells
+- Add-ons
+- Personalised recommendations
+
+### AI Restaurant Assistant
+
+A management assistant could answer questions such as:
+
+```text
+"What were our best-selling dishes this week?"
+
+"Which table generated the highest order value?"
+
+"What time was our busiest period yesterday?"
+
+"Which menu items are declining in sales?"
+```
+
+---
+
+# ✦ Target Market
+
+SERVÉ is initially designed for:
+
+- Independent restaurants
+- Premium restaurants
+- Casual dining
+- Fine dining
+- Cafés
+- Bars
+- Restaurant groups
+- Hospitality businesses
+
+The platform should be flexible enough to support both independent venues and multi-location operators.
+
+---
+
+# ✦ Quality Standards
+
+Before production release, every major feature should be tested for:
+
+- Functional correctness
+- Mobile responsiveness
+- Accessibility
+- Security
+- Performance
+- Error handling
+- Payment reliability
+- Realtime reliability
+- Data isolation
+- User permissions
+- GDPR considerations
+
+Production releases should not rely solely on manual testing.
+
+---
+
+# ✦ Project Status
+
+**Status: Active development**
+
+SERVÉ is being developed as an independent commercial restaurant technology platform.
+
+The architecture, product design, implementation, and branding are intended to evolve through real-world restaurant testing and customer feedback.
+
+---
+
+## SERVÉ
+
+**The smarter way to dine.**
+
+Premium hospitality technology for the modern restaurant.
