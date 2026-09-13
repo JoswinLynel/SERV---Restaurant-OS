@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useSearchParams, useRouter, useParams, usePathname } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { Check, ChevronDown, ChevronUp } from "lucide-react";
@@ -17,12 +17,17 @@ export default function SuccessPage() {
   const pathname = usePathname();
   const params = useParams();
   const { clearBasket } = useBasket();
+  const hasCleared = useRef(false);
 
   const menuUrl = pathname.replace("/success", "");
 
+  // Clear basket once on mount — use ref to prevent infinite re-render
   useEffect(() => {
-    clearBasket();
-  }, [clearBasket]);
+    if (!hasCleared.current) {
+      hasCleared.current = true;
+      clearBasket();
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (!orderId) return;
