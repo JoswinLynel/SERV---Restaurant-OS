@@ -125,7 +125,7 @@ export default function BasketPage() {
                     <h3 className="font-serif text-[var(--color-brand-ivory)] text-lg leading-tight">{item.name}</h3>
                     <div className="flex items-center gap-6">
                       <span className="text-[var(--color-brand-grey)] text-sm">{item.quantity}</span>
-                      <span className="font-sans font-medium text-sm">£{(itemPrice * item.quantity).toFixed(0)}</span>
+                      <span className="font-sans font-medium text-sm">£{(itemPrice * item.quantity).toFixed(2)}</span>
                     </div>
                   </div>
                   {item.modifiers.length > 0 && (
@@ -147,7 +147,7 @@ export default function BasketPage() {
         <div className="space-y-4 pt-4">
           <div className="flex justify-between text-[var(--color-brand-ivory)] text-sm">
             <span>Subtotal</span>
-            <span className="font-medium">£{total.toFixed(0)}</span>
+            <span className="font-medium">£{total.toFixed(2)}</span>
           </div>
         </div>
 

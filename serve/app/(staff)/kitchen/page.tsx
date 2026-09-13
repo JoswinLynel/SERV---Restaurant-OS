@@ -7,10 +7,27 @@ import { Clock } from "lucide-react";
 export default function KitchenDisplaySystem() {
   const [orders, setOrders] = useState<any[]>([]);
   const supabase = createClient();
+  const [restaurantId, setRestaurantId] = useState<string | null>(null);
+
+  useEffect(() => {
+    const initAuth = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        const { data: staffData } = await supabase
+          .from("staff")
+          .select("restaurant_id")
+          .eq("id", user.id)
+          .single();
+        if (staffData) {
+          setRestaurantId(staffData.restaurant_id);
+        }
+      }
+    };
+    initAuth();
+  }, [supabase]);
 
   const fetchOrders = async () => {
-    // For demo purposes, we fetch all non-completed orders.
-    // In a real app, this would be filtered by restaurant_id from the user session.
+    if (!restaurantId) return;
     const { data } = await supabase
       .from("orders")
       .select(`
@@ -22,6 +39,7 @@ export default function KitchenDisplaySystem() {
         )
       `)
       .neq("status", "completed")
+      .eq("restaurant_id", restaurantId)
       .order("created_at", { ascending: true });
     
     if (data) {
@@ -30,13 +48,14 @@ export default function KitchenDisplaySystem() {
   };
 
   useEffect(() => {
+    if (!restaurantId) return;
     fetchOrders();
 
     const channel = supabase
       .channel('kitchen-orders')
       .on(
         'postgres_changes',
-        { event: '*', schema: 'public', table: 'orders' },
+        { event: '*', schema: 'public', table: 'orders', filter: `restaurant_id=eq.${restaurantId}` },
         (payload) => {
           fetchOrders(); // Re-fetch to get nested relations easily, or selectively update state
         }
@@ -46,7 +65,7 @@ export default function KitchenDisplaySystem() {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [supabase]);
+  }, [supabase, restaurantId]);
 
   const updateOrderStatus = async (orderId: string, newStatus: string) => {
     await supabase.from("orders").update({ status: newStatus }).eq("id", orderId);

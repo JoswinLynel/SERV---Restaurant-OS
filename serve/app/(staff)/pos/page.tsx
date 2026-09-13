@@ -9,15 +9,31 @@ export default function POSPage() {
   const [selectedTable, setSelectedTable] = useState<any>(null);
   const [orders, setOrders] = useState<any[]>([]);
   const supabase = createClient();
+  const [restaurantId, setRestaurantId] = useState<string | null>(null);
 
-  // In a real app, restaurant_id would come from context/auth
-  const RESTAURANT_ID = "11111111-1111-1111-1111-111111111111";
+  useEffect(() => {
+    const initAuth = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        const { data: staffData } = await supabase
+          .from("staff")
+          .select("restaurant_id")
+          .eq("id", user.id)
+          .single();
+        if (staffData) {
+          setRestaurantId(staffData.restaurant_id);
+        }
+      }
+    };
+    initAuth();
+  }, [supabase]);
 
   const fetchTables = async () => {
+    if (!restaurantId) return;
     const { data } = await supabase
       .from("tables")
       .select("*")
-      .eq("restaurant_id", RESTAURANT_ID)
+      .eq("restaurant_id", restaurantId)
       .order("table_number", { ascending: true });
     
     if (data) setTables(data);
@@ -40,12 +56,13 @@ export default function POSPage() {
   };
 
   useEffect(() => {
+    if (!restaurantId) return;
     fetchTables();
     
     const channel = supabase
       .channel('pos-tables')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'tables' }, () => fetchTables())
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'orders' }, (payload) => {
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'tables', filter: `restaurant_id=eq.${restaurantId}` }, () => fetchTables())
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'orders', filter: `restaurant_id=eq.${restaurantId}` }, (payload) => {
         if (selectedTable) {
           fetchTableOrders(selectedTable.id);
         }
@@ -53,7 +70,7 @@ export default function POSPage() {
       .subscribe();
 
     return () => { supabase.removeChannel(channel); };
-  }, [supabase, selectedTable]);
+  }, [supabase, selectedTable, restaurantId]);
 
   const handleTableClick = (table: any) => {
     setSelectedTable(table);

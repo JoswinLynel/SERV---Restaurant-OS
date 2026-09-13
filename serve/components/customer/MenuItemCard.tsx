@@ -38,7 +38,7 @@ export function MenuItemCard({ item, restaurantId }: { item: any, restaurantId: 
           
           <div className="mt-auto pt-2 flex justify-between items-end">
             <span className="font-sans font-medium text-[var(--color-brand-ivory)] text-sm tracking-wide">
-              £{Number(item.price).toFixed(0)} {/* Prompt uses £, matching reference */}
+              £{Number(item.price).toFixed(2)}
             </span>
           </div>
         </div>
