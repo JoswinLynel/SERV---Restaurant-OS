@@ -4,10 +4,6 @@ import Stripe from "stripe";
 import { createClient } from "@/lib/supabase/server";
 import { headers } from "next/headers";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "sk_test_mock", {
-  apiVersion: "2026-08-26.dahlia",
-});
-
 export async function createCheckoutSession(
   restaurantId: string,
   tableId: string,
@@ -157,9 +153,22 @@ export async function createCheckoutSession(
     throw new Error("Failed to create payment record");
   }
 
-  // 6. Create Stripe Checkout Session
+  // 6. Build redirect URLs
   const headersList = await headers();
   const origin = headersList.get("origin") || process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+  const successUrl = `${origin}/menu/${restaurantId}/${tableId}/success?orderId=${order.id}`;
+  const cancelUrl = `${origin}/menu/${restaurantId}/${tableId}`;
+
+  // 7. If Stripe is configured, create a Stripe Checkout Session
+  //    If Stripe is NOT configured, redirect directly to success (order is already created)
+  if (!process.env.STRIPE_SECRET_KEY) {
+    console.warn("STRIPE_SECRET_KEY not configured — skipping Stripe, redirecting to success.");
+    return { url: successUrl };
+  }
+
+  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
+    apiVersion: "2026-08-26.dahlia",
+  });
 
   const session = await stripe.checkout.sessions.create({
     payment_method_types: ["card", "link"],
@@ -170,13 +179,13 @@ export async function createCheckoutSession(
           name: oi.name,
           description: oi.modifiers.length > 0 ? oi.modifiers.map(m => m.name).join(", ") : undefined,
         },
-        unit_amount: Math.round(oi.unit_price * 100), // Stripe expects pence/cents
+        unit_amount: Math.round(oi.unit_price * 100),
       },
       quantity: oi.quantity,
     })),
     mode: "payment",
-    success_url: `${origin}/menu/${restaurantId}/${tableId}/success?orderId=${order.id}`,
-    cancel_url: `${origin}/menu/${restaurantId}/${tableId}`,
+    success_url: successUrl,
+    cancel_url: cancelUrl,
     metadata: {
       orderId: order.id,
       tableId: tableId,
