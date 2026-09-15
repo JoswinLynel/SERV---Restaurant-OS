@@ -87,7 +87,7 @@ export default function SuccessPage() {
           </div>
           <h1 className="text-2xl font-serif tracking-wide">Order Confirmed</h1>
           <div className="space-y-1 text-sm text-[var(--color-brand-grey)]">
-            <p>Thank you.</p>
+            <p>Thank you{order.customer_name ? `, ${order.customer_name}` : ""}.</p>
             <p>Your order has been sent to the kitchen.</p>
             <p>We'll notify you when it's ready.</p>
           </div>

@@ -44,6 +44,7 @@ export default function CustomersPage() {
       .select(`
         id,
         table_id,
+        customer_name,
         status,
         payment_status,
         total,
