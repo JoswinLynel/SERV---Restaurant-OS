@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { LayoutDashboard, ReceiptText, ChefHat, Grid, BookOpen, CreditCard, Users, BarChart3, Settings } from "lucide-react";
+import StaffClock from "@/components/staff/StaffClock";
 
 export default function StaffLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -26,7 +27,6 @@ export default function StaffLayout({ children }: { children: React.ReactNode })
             { name: "Settings", href: "/settings", icon: Settings },
           ].map((item, idx) => {
             const Icon = item.icon;
-            const isActive = idx === 3; // Hardcoding POS/Tables active for demo if needed, or better just rely on hover
             return (
               <Link
                 key={item.name}
@@ -53,7 +53,13 @@ export default function StaffLayout({ children }: { children: React.ReactNode })
 
       {/* Main Content */}
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden bg-[var(--color-brand-bg-surface)]">
-        {children}
+        {/* Global Staff Header */}
+        <header className="h-20 shrink-0 flex items-center justify-end px-10 border-b border-white/5 bg-[var(--color-brand-bg-dark)]/50 backdrop-blur-sm z-10 hidden md:flex">
+          <StaffClock />
+        </header>
+        <div className="flex-1 min-h-0 relative">
+          {children}
+        </div>
       </div>
     </div>
   );

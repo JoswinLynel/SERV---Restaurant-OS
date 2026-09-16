@@ -1,14 +1,19 @@
 "use client";
 
-import { useEffect, useState, useMemo } from "react";
+import { Suspense, useEffect, useState, useMemo } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { Search, Filter, Clock, Receipt, MoreHorizontal } from "lucide-react";
 import { useRealtimeSync } from "@/hooks/useRealtimeSync";
+import { useSearchParams, useRouter } from "next/navigation";
 
-export default function OrdersPage() {
+function OrdersContent() {
   const [orders, setOrders] = useState<any[]>([]);
   const [tables, setTables] = useState<any[]>([]);
   const [restaurantId, setRestaurantId] = useState<string | null>(null);
+  
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const targetOrderId = searchParams.get('orderId');
   
   // Filters
   const [statusFilter, setStatusFilter] = useState("ALL"); // ALL, pending, preparing, ready, completed, cancelled
@@ -78,13 +83,16 @@ export default function OrdersPage() {
   };
 
   const filteredOrders = useMemo(() => {
+    if (targetOrderId) {
+      return orders.filter(o => o.id === targetOrderId);
+    }
     return orders.filter(o => {
       if (statusFilter !== "ALL" && o.status !== statusFilter) return false;
       if (tableFilter !== "ALL" && o.table_id !== tableFilter) return false;
       if (paymentFilter !== "ALL" && o.payment_status !== paymentFilter) return false;
       return true;
     });
-  }, [orders, statusFilter, tableFilter, paymentFilter]);
+  }, [orders, statusFilter, tableFilter, paymentFilter, targetOrderId]);
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -103,45 +111,56 @@ export default function OrdersPage() {
         <h1 className="text-3xl font-serif mb-6">Orders</h1>
         
         <div className="flex flex-wrap gap-4 items-center justify-between">
-          {/* Status Tabs */}
-          <div className="flex bg-[#1A1A1A] p-1 rounded border border-white/5 overflow-x-auto">
-            {['ALL', 'pending', 'preparing', 'ready', 'completed', 'cancelled'].map(status => (
-              <button
-                key={status}
-                onClick={() => setStatusFilter(status)}
-                className={`px-4 py-2 text-xs font-medium tracking-widest uppercase rounded transition-colors ${
-                  statusFilter === status 
-                    ? 'bg-[var(--color-brand-bg-elevated)] text-[var(--color-brand-ivory)] shadow' 
-                    : 'text-[var(--color-brand-grey)] hover:text-[var(--color-brand-ivory)]'
-                }`}
-              >
-                {status === 'pending' ? 'NEW' : status}
-              </button>
-            ))}
-          </div>
-
-          <div className="flex gap-4">
-            <select
-              value={tableFilter}
-              onChange={(e) => setTableFilter(e.target.value)}
-              className="bg-[#1A1A1A] border border-white/10 text-[var(--color-brand-ivory)] text-sm rounded px-4 py-2 focus:outline-none focus:border-[var(--color-brand-gold)]/50"
+          {targetOrderId ? (
+            <button 
+              onClick={() => router.push('/orders')} 
+              className="px-4 py-2 border border-[var(--color-brand-gold)] text-[var(--color-brand-gold)] rounded text-sm tracking-widest uppercase font-medium hover:bg-[var(--color-brand-gold)]/10 transition-colors flex items-center gap-2"
             >
-              <option value="ALL">All Tables</option>
-              {tables.map(t => (
-                <option key={t.id} value={t.id}>Table {t.table_number}</option>
-              ))}
-            </select>
+              ← Back to All Orders
+            </button>
+          ) : (
+            <>
+              {/* Status Tabs */}
+              <div className="flex bg-[#1A1A1A] p-1 rounded border border-white/5 overflow-x-auto">
+                {['ALL', 'pending', 'preparing', 'ready', 'completed', 'cancelled'].map(status => (
+                  <button
+                    key={status}
+                    onClick={() => setStatusFilter(status)}
+                    className={`px-4 py-2 text-xs font-medium tracking-widest uppercase rounded transition-colors ${
+                      statusFilter === status 
+                        ? 'bg-[var(--color-brand-bg-elevated)] text-[var(--color-brand-ivory)] shadow' 
+                        : 'text-[var(--color-brand-grey)] hover:text-[var(--color-brand-ivory)]'
+                    }`}
+                  >
+                    {status === 'pending' ? 'NEW' : status}
+                  </button>
+                ))}
+              </div>
 
-            <select
-              value={paymentFilter}
-              onChange={(e) => setPaymentFilter(e.target.value)}
-              className="bg-[#1A1A1A] border border-white/10 text-[var(--color-brand-ivory)] text-sm rounded px-4 py-2 focus:outline-none focus:border-[var(--color-brand-gold)]/50"
-            >
-              <option value="ALL">All Payments</option>
-              <option value="paid">Paid</option>
-              <option value="unpaid">Unpaid</option>
-            </select>
-          </div>
+              <div className="flex gap-4">
+                <select
+                  value={tableFilter}
+                  onChange={(e) => setTableFilter(e.target.value)}
+                  className="bg-[#1A1A1A] border border-white/10 text-[var(--color-brand-ivory)] text-sm rounded px-4 py-2 focus:outline-none focus:border-[var(--color-brand-gold)]/50"
+                >
+                  <option value="ALL">All Tables</option>
+                  {tables.map(t => (
+                    <option key={t.id} value={t.id}>Table {t.table_number}</option>
+                  ))}
+                </select>
+
+                <select
+                  value={paymentFilter}
+                  onChange={(e) => setPaymentFilter(e.target.value)}
+                  className="bg-[#1A1A1A] border border-white/10 text-[var(--color-brand-ivory)] text-sm rounded px-4 py-2 focus:outline-none focus:border-[var(--color-brand-gold)]/50"
+                >
+                  <option value="ALL">All Payments</option>
+                  <option value="paid">Paid</option>
+                  <option value="unpaid">Unpaid</option>
+                </select>
+              </div>
+            </>
+          )}
         </div>
       </div>
 
@@ -150,13 +169,18 @@ export default function OrdersPage() {
           {filteredOrders.length === 0 ? (
             <div className="text-center py-20 border border-dashed border-white/10 rounded-xl bg-white/5">
               <Receipt className="w-12 h-12 text-white/20 mx-auto mb-4" />
-              <h3 className="text-xl font-serif text-[var(--color-brand-ivory)]">No Orders Found</h3>
-              <p className="text-[var(--color-brand-grey)] mt-2">There are no orders matching your current filters.</p>
+              <h3 className="text-xl font-serif text-[var(--color-brand-ivory)]">Order Not Found</h3>
+              <p className="text-[var(--color-brand-grey)] mt-2">
+                {targetOrderId ? "The requested order could not be found." : "There are no orders matching your current filters."}
+              </p>
             </div>
           ) : (
             filteredOrders.map(order => (
-              <div key={order.id} className="bg-[var(--color-brand-bg-dark)] border border-white/5 rounded-xl overflow-hidden shadow-xl">
-                <div className="px-6 py-4 border-b border-white/5 bg-white/5 flex items-center justify-between">
+              <div 
+                key={order.id} 
+                className={`bg-[var(--color-brand-bg-dark)] border ${targetOrderId === order.id ? 'border-[var(--color-brand-gold)] shadow-[0_0_20px_rgba(212,175,55,0.15)] ring-1 ring-[var(--color-brand-gold)]' : 'border-white/5'} rounded-xl overflow-hidden shadow-xl transition-all duration-300`}
+              >
+                <div className={`px-6 py-4 border-b ${targetOrderId === order.id ? 'border-[var(--color-brand-gold)]/20 bg-[var(--color-brand-gold)]/5' : 'border-white/5 bg-white/5'} flex items-center justify-between`}>
                   <div className="flex items-center gap-6">
                     <span className="font-serif text-xl text-[var(--color-brand-ivory)]">Order #{order.id.split('-')[0].toUpperCase()}</span>
                     <span className="px-3 py-1 rounded text-xs tracking-wider uppercase font-medium bg-[var(--color-brand-bg-elevated)] border border-white/10 text-[var(--color-brand-ivory)]">
@@ -165,9 +189,9 @@ export default function OrdersPage() {
                     <span className="px-3 py-1 rounded text-xs tracking-wider uppercase font-medium bg-[var(--color-brand-bg-elevated)] border border-white/10 text-[var(--color-brand-gold)]">
                       Table {order.tables?.table_number || 'Unknown'}
                     </span>
-                    <div className="flex items-center gap-2 text-xs text-[var(--color-brand-grey)] tracking-wider">
+                    <div className="flex items-center gap-2 text-xs text-[var(--color-brand-grey)] tracking-wider whitespace-nowrap">
                       <Clock className="w-3.5 h-3.5" />
-                      {new Date(order.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                      {new Date(order.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}, {new Date(order.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                     </div>
                   </div>
                   <div className="flex items-center gap-4">
@@ -243,5 +267,13 @@ export default function OrdersPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function OrdersPage() {
+  return (
+    <Suspense fallback={<div className="p-10 text-[var(--color-brand-grey)] flex justify-center items-center h-full">Loading orders...</div>}>
+      <OrdersContent />
+    </Suspense>
   );
 }

@@ -76,10 +76,6 @@ export default function KitchenDisplaySystem() {
           <h1 className="text-xl font-serif tracking-widest uppercase">Kitchen Display</h1>
           <p className="text-[10px] uppercase tracking-[0.2em] text-[var(--color-brand-grey)] mt-1">Live Order Stream</p>
         </div>
-        <div className="flex items-center gap-3 text-[var(--color-brand-grey)] border border-white/10 px-4 py-2 rounded-full">
-          <Clock className="w-4 h-4" />
-          <span className="font-medium tracking-[0.1em] text-sm">{new Date().toLocaleTimeString()}</span>
-        </div>
       </header>
 
       <main className="flex-1 overflow-x-auto p-8">

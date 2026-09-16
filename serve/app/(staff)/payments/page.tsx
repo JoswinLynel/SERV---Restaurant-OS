@@ -44,6 +44,7 @@ export default function PaymentsPage() {
         orders!inner(
           id, 
           restaurant_id,
+          customer_name,
           tables(table_number)
         )
       `)
@@ -113,6 +114,7 @@ export default function PaymentsPage() {
                   <tr className="border-b border-white/10 text-xs uppercase tracking-widest text-[var(--color-brand-grey)]">
                     <th className="px-6 py-4 font-medium">Date & Time</th>
                     <th className="px-6 py-4 font-medium">Order ID</th>
+                    <th className="px-6 py-4 font-medium">Customer</th>
                     <th className="px-6 py-4 font-medium">Table</th>
                     <th className="px-6 py-4 font-medium text-right">Amount</th>
                     <th className="px-6 py-4 font-medium text-center">Status</th>
@@ -130,6 +132,11 @@ export default function PaymentsPage() {
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span className="font-mono text-xs opacity-70" title={payment.order_id}>
                           {payment.order_id.split('-')[0]}...
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span className="bg-[var(--color-brand-bg-elevated)] border border-white/10 px-2 py-1 rounded text-xs uppercase tracking-wider text-[var(--color-brand-ivory)]">
+                          {payment.orders.customer_name || "Anonymous"}
                         </span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
@@ -151,7 +158,7 @@ export default function PaymentsPage() {
                         </span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-right">
-                        <Link href="/orders" className="text-xs text-[var(--color-brand-gold)] hover:underline">
+                        <Link href={`/orders?orderId=${payment.order_id}`} className="text-xs text-[var(--color-brand-gold)] hover:underline">
                           View Order
                         </Link>
                       </td>
