@@ -23,6 +23,16 @@ export function CustomerNameGuard({
   const storageKey = `serve_customer_name_${restaurantId}_${tableId}`;
 
   useEffect(() => {
+    // Check if this is a fresh scan triggering a new session
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("new_session") === "true") {
+      sessionStorage.removeItem(storageKey);
+      
+      // Clean up the URL to prevent re-triggering on refresh
+      const newUrl = window.location.pathname;
+      window.history.replaceState({}, "", newUrl);
+    }
+
     // Check if name exists in sessionStorage
     const savedName = sessionStorage.getItem(storageKey);
     if (savedName && savedName.trim().length > 0) {

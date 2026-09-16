@@ -13,13 +13,13 @@ export default async function TableCodePage({
   const { data: table } = await supabase
     .from("tables")
     .select("id, restaurant_id")
-    .eq("code", tableCode)
+    .ilike("code", tableCode)
     .single();
 
   if (!table) {
     return notFound();
   }
 
-  // Redirect to the existing working customer menu route
-  redirect(`/menu/${table.restaurant_id}/${table.id}`);
+  // Redirect to the existing working customer menu route with a new session flag
+  redirect(`/menu/${table.restaurant_id}/${table.id}?new_session=true`);
 }
